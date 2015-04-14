@@ -5,14 +5,18 @@ import 'package:SiaInterface/SiaInterface.dart' as SiaInterface;
 
 void parseHost(var requestList) {
   var request = requestList[0].substring(4,requestList[0].length);
-  if (request == "announce") {
-    // print success if true
-  }
-  else if (request == "config") {
-    // do config stuff
-  }
-  else if (request == "status") {
-    // print status output
+  switch (request) {
+    case 'announce':
+      
+      break;
+    case 'config':
+      
+      break;
+    case 'status':
+      
+      break;
+    default:
+      print("invalid argument");
   }
 }
 
@@ -24,29 +28,29 @@ main(List<String> arguments) {
   // $ dart main.dart host/config parameters
   var request = arguments[0];
   switch (request) {
-    case '/daemon':
-      executeClosed();
+    case request.substring(0,6) == 'daemon':
+//      parseDaemon(arguments);
       break;
-    case '/consensus':
-      executeOpen();
+    case 'consensus':
+//      executeOpen();
       break;
-    case '/gateway':
-      executeApproved();
+    case 'gateway':
+//      executeApproved();
       break;
-    case '/host':
-      executeApproved();
+    case 'host':
+      parseHost(arguments);
       break;
-    case '/miner':
-      executeApproved();
+    case 'miner':
+//      executeApproved();
       break;
-    case '/renter':
-      executeApproved();
+    case 'renter':
+//      executeApproved();
       break;
-    case '/transactionpool':
-      executeApproved();
+    case 'transactionpool':
+//      executeApproved();
       break;
     case '/wallet':
-      executeApproved();
+//      executeApproved();
       break;      
     default:
       print('nothing works');
