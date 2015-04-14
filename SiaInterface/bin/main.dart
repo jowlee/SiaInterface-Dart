@@ -20,8 +20,33 @@ main(List<String> arguments) {
   // first arguement decides where to send it
   // $ dart main.dart host/config parameters
   var request = arguments[0];
-  if (request.toLowerCase().substring(0, 4) == "host"){
-    parseHost(arguments);
+  switch (request) {
+    case '/daemon':
+      executeClosed();
+      break;
+    case '/consensus':
+      executeOpen();
+      break;
+    case '/gateway':
+      executeApproved();
+      break;
+    case '/host':
+      executeApproved();
+      break;
+    case '/miner':
+      executeApproved();
+      break;
+    case '/renter':
+      executeApproved();
+      break;
+    case '/transactionpool':
+      executeApproved();
+      break;
+    case '/wallet':
+      executeApproved();
+      break;      
+    default:
+      print('nothing works');
   }
   
 }
