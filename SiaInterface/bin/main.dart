@@ -7,18 +7,21 @@ import 'package:SiaInterface/SiaInterface.dart' as SiaInterface;
 import 'package:http/http.dart' as http;
 
 void outputInfo(var jsonString) {
-  print(jsonString);
+  print(jsonString.body);
 }
 
 
 void parseHost(var requestList) {
   var request = requestList[0];
   if (request.contains("announce", 4)) {
-    
+    var url = "http://localhost:9980/host/announce";
+    http.get(url).then(outputInfo);
+//    http.get(url).then((response){
+//      print("Response status: ${response.statusCode}");
+//          print("Response body: ${response.body}");
+//    });
   }
   else if (request.contains("config", 4)) {
-    var url = "http://localhost:9980/host/announce";
-    http.get(url).then((outputInfo));
   }
   else if (request.contains("status", 4)) {
     
@@ -47,7 +50,7 @@ main(List<String> arguments) {
 //    put your function here
   }
   else if(request.contains('host',0)){
-    parseHost(arguements)
+    parseHost(arguments);
   }
   else if(request.contains('miner',0)){
 //    put your function here
