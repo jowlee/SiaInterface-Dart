@@ -41,33 +41,32 @@ main(List<String> arguments) {
   // first arguement decides where to send it
   // $ dart main.dart host/config parameters
   var request = arguments[0];
-  switch (request) {
-    case '/daemon':
+  if(request.substring(0, 6) == 'daemon') {
 //      executeClosed();
-      break;
-    case '/consensus':
-//      executeOpen();
-      break;
-    case '/gateway':
-//      executeApproved();
-      break;
-    case '/host':
-//      executeApproved();
-      break;
-    case '/miner':
-//      executeApproved();
-      break;
-    case request.substring(0,5) == 'renter':
-      renter(request);
-      break;
-    case request.substring(0,15) == 'transactionpool':
-//      executeApproved();
-      break;
-    case request.substring(0,6) == 'wallet':
-//      executeApproved();
-      break;      
-    default:
-      print('nothing works');
+  }
+  else if(request.substring(0, 9) == 'consensus'){
+//    put your function here
+  }
+  else if(request.substring(0, 7) == 'gateway'){
+//    put your function here
+  }
+  else if(request.substring(0, 5) == 'host'){
+//    put your function here
+  }
+  else if(request.substring(0, 5) == 'miner'){
+//    put your function here
+  }
+  else if(request.substring(0, 6) == 'renter'){
+    renter(request);
+  }
+  else if(request.substring(0, 15) == 'transactionpool'){
+//    put your function here
+  }
+  else if(request.substring(0, 6) == 'wallet'){
+//    put your function here
+  }
+  else{
+    print('nothing works');
   }
   
 }
