@@ -7,10 +7,13 @@ import 'dart:html';
 void parseHost(var requestList) {
   var request = requestList[0].substring(4,requestList[0].length);
   if (request == "announce") {
-    // do announce stuff
+    // print success if true
   }
   else if (request == "config") {
     // do config stuff
+  }
+  else if (request == "status") {
+    // print status output
   }
 }
 
