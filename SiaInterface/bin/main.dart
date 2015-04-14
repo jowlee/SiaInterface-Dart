@@ -4,28 +4,31 @@
 import 'package:SiaInterface/SiaInterface.dart' as SiaInterface;
 //import 'dart:html';
 //import 'dart:io';
+import 'package:http/http.dart' as http;
 
 void outputInfo(var jsonString) {
   print(jsonString);
 }
 
+
 void parseHost(var requestList) {
-  var request = requestList[0].substring(4,requestList[0].length);
-  switch (request) {
-    case 'announce':
-      var url = "http://localhost:9980/host/announce";
-        var jsonString = HttpRequest.getString(url).then(outputInfo);
-      break;
-    case 'config':
-      
-      break;
-    case 'status':
-      
-      break;
-    default:
-      print("invalid argument");
+  var request = requestList[0];
+  if (request.contains("announce", 4)) {
+    
+  }
+  else if (request.contains("config", 4)) {
+    var url = "http://localhost:9980/host/announce";
+    http.get(url).then((outputInfo));
+  }
+  else if (request.contains("status", 4)) {
+    
+  }
+  else {
+    print ("invalid argument");
   }
 }
+
+
 
 main(List<String> arguments) {
   if (arguments.length == 0) {
@@ -34,34 +37,32 @@ main(List<String> arguments) {
   // first arguement decides where to send it
   // $ dart main.dart host/config parameters
   var request = arguments[0];
-  switch (request) {
-    case 'daemon':
-      print("test");
-//      parseDaemon(arguments);
-      break;
-    case 'consensus':
-//      executeOpen();
-      break;
-    case 'gateway':
-//      executeApproved();
-      break;
-    case 'host':
-      parseHost(arguments);
-      break;
-    case 'miner':
-//      executeApproved();
-      break;
-    case 'renter':
-//      executeApproved();
-      break;
-    case 'transactionpool':
-//      executeApproved();
-      break;
-    case '/wallet':
-//      executeApproved();
-      break;      
-    default:
-      print('nothing works');
+  if (request.contains('daemon',0)) {
+    print("daemon");
+  }
+  else if(request.contains('consensus',0)){
+//    put your function here
+  }
+  else if(request.contains('gateway',0)){
+//    put your function here
+  }
+  else if(request.contains('host',0)){
+    parseHost(arguements)
+  }
+  else if(request.contains('miner',0)){
+//    put your function here
+  }
+  else if(request.contains('renter',0)){
+//    renter(request);
+  }
+  else if(request.contains('transactionpool',0)) {
+//    put your function here
+  }
+  else if(request.contains('wallet',0)){
+//    put your function here
+  }
+  else{
+    print('invalid arguement');
   }
   
 }
