@@ -3,24 +3,25 @@
 
 import 'package:SiaInterface/SiaInterface.dart' as SiaInterface;
 
-void parseHost(var request) {
-  if (request.substring(4,12) == "announce") {
+void parseHost(var requestList) {
+  var request = requestList[0].substring(4,requestList[0].length);
+  if (request == "announce") {
     // do announce stuff
   }
-  else if (request.substring(4,12) == "config") {
+  else if (request == "config") {
     // do config stuff
   }
 }
 
 main(List<String> arguments) {
-  if (arguments.length == 1) {
+  if (arguments.length == 0) {
     return 0;
   }
-  // one arguement allowed
-  // $ dart main.dart host/config
+  // first arguement decides where to send it
+  // $ dart main.dart host/config parameters
   var request = arguments[0];
-  if (arguments[0].toLowerCase().substring(0, 4) == "host"){
-    parseHost(arguments[0]);
+  if (request.toLowerCase().substring(0, 4) == "host"){
+    parseHost(arguments);
   }
   
 }
