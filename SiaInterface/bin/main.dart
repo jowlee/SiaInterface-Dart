@@ -5,26 +5,23 @@ import 'package:SiaInterface/SiaInterface.dart' as SiaInterface;
 //import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'Renter.dart';
+import 'Host.dart';
 
 void outputInfo(var jsonString) {
   print(jsonString.body);
 }
 
 
-void parseHost(var requestList) {
-  var request = requestList[0];
-  if (request.contains("announce", 4)) {
-    var url = "http://localhost:9980/host/announce";
-    http.get(url).then(outputInfo);
-    http.get(url).then((response){
-      print("Response status: ${response.statusCode}");
-          print("Response body: ${response.body}");
-    });
+void parseHost(var args) {
+  var request = args[0];
+  if (request.contains("announce", 4) && args.length == 1) {
+    Host.announce();
   }
-  else if (request.contains("config", 4)) {
+  else if (request.contains("config", 4) && args.length == 9) {
+    Host.config(args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]);
   }
-  else if (request.contains("status", 4)) {
-    
+  else if (request.contains("status", 4) && args.length == 1) {
+    Host.status();
   }
   else {
     print ("invalid argument");
@@ -41,7 +38,7 @@ void parseRenter(var args) {
   }
   else if (request.contains("download", 6)) {
     var nickname = args[1];
-    var destination = args[2];    
+    var destination = args[2];
     renter.download(nickname, destination);
   }
   

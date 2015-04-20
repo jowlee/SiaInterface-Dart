@@ -1,5 +1,5 @@
+library Renter;
 import 'package:http/http.dart' as http;
-import 'dart:io';
 
 class Renter {
 
@@ -10,7 +10,6 @@ class Renter {
 
   download(String nickname, String destination) {
     var url = "http://localhost:9980/renter/download";
-
     http.post(url, body: 'name=doodle&color=blue').then((response) {
        print("Response status: ${response.statusCode}");
        print("Response body: ${response.body}");
