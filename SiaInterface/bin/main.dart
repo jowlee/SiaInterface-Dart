@@ -1,10 +1,10 @@
-// Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
+// Copyright (c) 2015, <Joseph Lee>. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
 import 'package:SiaInterface/SiaInterface.dart' as SiaInterface;
-//import 'dart:html';
 //import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'Renter.dart';
 
 void outputInfo(var jsonString) {
   print(jsonString.body);
@@ -16,10 +16,10 @@ void parseHost(var requestList) {
   if (request.contains("announce", 4)) {
     var url = "http://localhost:9980/host/announce";
     http.get(url).then(outputInfo);
-//    http.get(url).then((response){
-//      print("Response status: ${response.statusCode}");
-//          print("Response body: ${response.body}");
-//    });
+    http.get(url).then((response){
+      print("Response status: ${response.statusCode}");
+          print("Response body: ${response.body}");
+    });
   }
   else if (request.contains("config", 4)) {
   }
@@ -30,6 +30,37 @@ void parseHost(var requestList) {
     print ("invalid argument");
   }
 }
+
+
+void parseRenter(var args) {
+  var request = args[0];
+  var renter = new Renter();
+  print(request);
+  if (request.contains("downloadqueue", 6)) {
+    renter.downloadqueue();
+  }
+  else if (request.contains("download", 6)) {
+    var nickname = args[1];
+    var destination = args[2];    
+    renter.download(nickname, destination);
+  }
+  
+  else if (request.contains("files", 6)) {
+    renter.files();
+  }
+  
+  else if (request.contains("upload", 6)) {
+    var source = args[1];
+    var nickname = args[2];
+    renter.upload(source, nickname);
+  }
+  
+  else {
+    print ("invalid argument");
+  }
+}
+
+
 
 
 
@@ -56,7 +87,7 @@ main(List<String> arguments) {
 //    put your function here
   }
   else if(request.contains('renter',0)){
-//    renter(request);
+    parseRenter(arguments);
   }
   else if(request.contains('transactionpool',0)) {
 //    put your function here
