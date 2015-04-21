@@ -1,7 +1,9 @@
+library Renter;
 import 'package:http/http.dart' as http;
 import 'infoStorage.dart';
 import 'dart:convert';
 import 'infoStorage.dart';
+
 
 class Renter {
   
@@ -12,7 +14,6 @@ class Renter {
 
   static bool download(String nickname, String destination) {
     var url = "http://localhost:9980/renter/download";
-
     http.post(url, body: 'name=doodle&color=blue').then((response) {
        print("Response status: ${response.statusCode}");
        print("Response body: ${response.body}");
