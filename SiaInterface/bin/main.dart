@@ -10,17 +10,26 @@ import 'Host.dart';
 void outputInfo(var jsonString) {
   print(jsonString.body);
 }
-
+bool assertSize(var args, int length, int name) {
+  if (args.length-1 != length) {
+    print("$name should have $length parameter(s)");
+    return false;
+  }
+  return true;
+}
 
 void parseHost(var args) {
   var request = args[0];
-  if (request.contains("announce", 4) && args.length == 1) {
+  if (request.contains("announce", 4)) {
+    if (!assertSize(args, 0, request)) {return;}
     Host.announce();
   }
-  else if (request.contains("config", 4) && args.length == 9) {
+  else if (request.contains("config", 4)) {
+    if (!assertSize(args, 8, request)) {return;}
     Host.config(args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]);
   }
-  else if (request.contains("status", 4) && args.length == 1) {
+  else if (request.contains("status", 4)) {
+    if (!assertSize(args, 0, request)) {return;}
     Host.status();
   }
   else {
@@ -63,6 +72,7 @@ void parseRenter(var args) {
 
 main(List<String> arguments) {
   if (arguments.length == 0) {
+    print("Usage: <api-call> <args>");
     return 0;
   }
   // first arguement decides where to send it
