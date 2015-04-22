@@ -1,8 +1,7 @@
 library Renter;
 import 'package:http/http.dart' as http;
-import 'infoStorage.dart';
 import 'dart:convert';
-import 'infoStorage.dart';
+import 'Response.dart';
 
 
 class Renter {
@@ -14,22 +13,25 @@ class Renter {
 
   static bool download(String nickname, String destination) {
     var url = "http://localhost:9980/renter/download";
-    http.post(url, body: 'name=doodle&color=blue').then((response) {
-       print("Response status: ${response.statusCode}");
-       print("Response body: ${response.body}");
+    url += '?nickname=$nickname&destination=$destination';
+    http.get(url).then((response) {
+      var res = new Response.fromJSON(response.body);
+      if(res.getSuccess()){
+        print("Response status: ${response.statusCode}");
+        print("Response body: ${response.body}");        
+      }
      });
     
     return true;
   }
   
   static downloadqueue() {
-
     var url = "http://localhost:9980/renter/downloadqueue";
 
     http.get(url).then((response){
 //      Map data = JSON.decode(response.body);
 //      print(data);
-      print("Response status: ${response.statusCode}");
+      prinhowt("Response status: ${response.statusCode}");
       print("Response body: ${response.body}");
     });
 
