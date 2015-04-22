@@ -4,12 +4,8 @@ class Response {
   bool Success;
   
   Response.fromJSON(var o){
-    print("HERE");
     Map parsedMap = JSON.decode(o);
-    print("HERE");
     Success = parsedMap["Success"];
-    print("HERE");
-
   }
   
   bool getSuccess(){
@@ -17,6 +13,7 @@ class Response {
   }
   
 }
+
 /*
 class UpdateCheckResponse extends Response {
   bool Availible;
@@ -68,7 +65,7 @@ class MinerStatusResponse extends Response {
   
 }
 
-
+*/
 class RenterDownloadQueueResponse extends Response {
   
 //  Complete    bool
@@ -77,8 +74,32 @@ class RenterDownloadQueueResponse extends Response {
 //  Destination string
 //  Nickname    string
   
+  bool Complete;
+  var Filesize;
+  var Received;
+  String Destination;
+  String Nickname;
+  
+  RenterDownloadQueueResponse.fromJSON(var o) : super.fromJSON(o) {
+    Map parsedMap = JSON.decode(o);
+    Complete = parsedMap["Complete"];
+    Filesize = parsedMap["Filesize"];
+    Received = parsedMap["Received"];
+    Destination = parsedMap["Destination"];
+    Nickname = parsedMap["Nickname"];
+  }
+  
+  bool getComplete(){
+    return Complete;
+  }
+  String getDestination(){
+    return Destination;
+  }
+  String getNickname(){
+    return Nickname;
+  }
 }
-
+/*
 class RenterFilesResponse extends Response {
   
 //  Available     bool

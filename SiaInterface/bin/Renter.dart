@@ -13,27 +13,29 @@ class Renter {
 
   static bool download(String nickname, String destination) {
     var url = "http://localhost:9980/renter/download";
-    url += '?nickname=$nickname&destination=$destination';
+    url += '?nickname=$nickname&destination=$destination';    // Addition of Parameters
+    var res;
     http.get(url).then((response) {
-      var res = new Response.fromJSON(response.body);
-      if(res.getSuccess()){
-        print("Response status: ${response.statusCode}");
-        print("Response body: ${response.body}");        
-      }
+      res = new Response.fromJSON(response.body);         // Standard Response Constructor
+      print("Response status: ${response.statusCode}");
+      print("Response body: ${response.body}"); 
      });
-    
-    return true;
+    return res.getSuccess(); 
   }
   
-  static downloadqueue() {
+  static RenterDownloadQueueResponse downloadqueue() {
     var url = "http://localhost:9980/renter/downloadqueue";
+    var res;
 
     http.get(url).then((response){
+      res = new RenterDownloadQueueResponse.fromJSON(response.body);         // Standard Response Constructor
+
 //      Map data = JSON.decode(response.body);
 //      print(data);
-      prinhowt("Response status: ${response.statusCode}");
+      print("Response status: ${response.statusCode}");
       print("Response body: ${response.body}");
     });
+    return res; 
 
   }
   
@@ -67,10 +69,5 @@ class Renter {
     return true;
   }
   
-  void storeinfo(var body) {
-//    print(jsonString.body);
-    print("Hello");
-    infoStorage temp = new infoStorage(body);
-  }
 
 }
