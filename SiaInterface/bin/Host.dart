@@ -2,6 +2,7 @@ library Host;
 import 'package:http/http.dart' as http;
 //import 'package:http/httprequest.dart';
 import 'dart:convert';
+import 'Response.dart';
 
 class Host {
 
@@ -31,24 +32,28 @@ class Host {
 
   }
 
-  static status() {
+  static HostStatusResponse status() {
     var url = "http://localhost:9980/host/status";
+    var res;
     http.get(url).then((response){
-      print("Response status: ${response.statusCode}");
-      List<String> repos = JSON.decode(response.body);
-      print("TotalStorage ${repos['TotalStorage']}");
-      print("MinFilesize ${repos['MinFilesize']}");
-      print("MaxFilesize ${repos['MaxFilesize']}");
-      print("MinDuration ${repos['MinDuration']}");
-      print("MaxDuration ${repos['MaxDuration']}");
-      print("WindowSize ${repos['WindowSize']}");
-      print("Price ${repos['Price']}");
-      print("Collateral ${repos['Collateral']}");
-      print("StorageRemaining ${repos['StorageRemaining']}");
-      print("NumContracts ${repos['NumContracts']}");
+      res = new HostStatusResponse.fromJSON(response.body);         // Standard Response Constructor
+
+//      print("Response status: ${response.statusCode}");
+//      List<String> repos = JSON.decode(response.body);
+      print("TotalStorage : ${res.getTotalStorage()}");
+      print("MinFilesize : ${res.getMinFilesize()}");
+      print("MaxFilesize : ${res.getMaxFilesize()}");
+      print("MinDuration ${res.getMinDuration()}");
+      print("MaxDuration ${res.getMaxDuration()}");
+      print("WindowSize ${res.getWindowSize()}");
+      print("Price ${res.getPrice()}");
+      print("Collateral ${res.getCollateral()}");
+      print("StorageRemaining ${res.getStorageRemaining()}");
+      print("NumContracts ${res.getNumContracts()}");
 
       //          print("Response body: ${response.body}");
     });
+    return res;
   }
 }
 void parse(String response) {

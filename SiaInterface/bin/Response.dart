@@ -32,7 +32,7 @@ class GatewayStatusResponse extends Response {
 //  Address NetAddress
 //  Peers   []string
 }
-
+*/
 class HostStatusResponse extends Response {
   
 //      TotalStorage     int
@@ -46,8 +46,64 @@ class HostStatusResponse extends Response {
 //      StorageRemaining int
 //      NumContracts     int
   
+  int TotalStorage;
+  int MinFilesize;
+  int MaxFilesize;
+  int MinDuration;
+  int MaxDuration;
+  int WindowSize;
+  int Price;
+  int Collateral;
+  int StorageRemaining;
+  int NumContracts;
+  
+  HostStatusResponse.fromJSON(var o) : super.fromJSON(o) {
+    Map parsedMap = JSON.decode(o);
+    TotalStorage = parsedMap["TotalStorage"];
+    MinFilesize = parsedMap["MinFilesize"];
+    MaxFilesize = parsedMap["MaxFilesize"];
+    MinDuration = parsedMap["MinDuration"];
+    MaxDuration = parsedMap["MaxDuration"];
+    WindowSize = parsedMap["WindowSize"];
+    Price = parsedMap["Price"];
+    Collateral = parsedMap["Collateral"];
+    StorageRemaining = parsedMap["StorageRemaining"];
+    NumContracts = parsedMap["NumContracts"];
+  }
+  
+  int getTotalStorage(){
+    return TotalStorage;
+  }
+  int getMinFilesize(){
+    return MinFilesize;
+  }
+  int getMaxFilesize(){
+    return MaxFilesize;
+  }
+  int getMinDuration(){
+    return MinDuration;
+  }
+  int getMaxDuration(){
+    return MaxDuration;
+  }
+  int getWindowSize(){
+    return WindowSize;
+  }
+  int getPrice(){
+    return Price;
+  }
+  int getCollateral(){
+    return Collateral;
+  }
+  int getStorageRemaining(){
+    return StorageRemaining;
+  }
+  int getNumContracts(){
+    return NumContracts;
+  }
+  
 }
-
+/*
 class HostDBHostsActiveRespose extends Response {
   
 //  Entries []HostEntry
