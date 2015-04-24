@@ -40,25 +40,25 @@ void parseHost(var args) {
 
 void parseRenter(var args) {
   var request = args[0];
-  var renter = new Renter();
   print(request);
   if (request.contains("downloadqueue", 6)) {
-    renter.downloadqueue();
+    Renter.downloadqueue();
   }
   else if (request.contains("download", 6)) {
     var nickname = args[1];
-    var destination = args[2];
-    renter.download(nickname, destination);
+    var destination = args[2];    
+    Renter.download(nickname, destination);
+
   }
   
   else if (request.contains("files", 6)) {
-    renter.files();
+    Renter.files();
   }
   
   else if (request.contains("upload", 6)) {
     var source = args[1];
     var nickname = args[2];
-    renter.upload(source, nickname);
+    Renter.upload(source, nickname);
   }
   
   else {
