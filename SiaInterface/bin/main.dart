@@ -3,9 +3,10 @@
 
 import 'package:SiaInterface/SiaInterface.dart' as SiaInterface;
 //import 'dart:io';
-import 'package:http/http.dart' as http;
+//import 'package:http/http.dart' as http;
 import 'Renter.dart';
 import 'Host.dart';
+import 'Response.dart';
 
 void outputInfo(var jsonString) {
   print(jsonString.body);
@@ -22,15 +23,19 @@ void parseHost(var args) {
   var request = args[0];
   if (request.contains("announce", 4)) {
     if (!assertSize(args, 0, request)) {return;}
-    Host.announce();
+    String url = "http://localhost:9980/host/announce";
+    HostAnnounceResponse host = Response.getData(url);
   }
   else if (request.contains("config", 4)) {
     if (!assertSize(args, 8, request)) {return;}
-    Host.config(args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]);
+    String url = "http://localhost:9980/host/announce";
+    url += '?totalStorage=${args[1]}&minFilesize=${args[2]}&maxFilesize=${args[3]}&minDuration=${args[4]}&maxDuration=${args[4]}&windowSize=${args[6]}&price=${args[7]}&collateral=${args[8]}';
+    HostConfigResponse host = Response.getData(url);
   }
   else if (request.contains("status", 4)) {
     if (!assertSize(args, 0, request)) {return;}
-    Host.status();
+    var url = "http://localhost:9980/host/status";
+    HostStatusResponse host = Response.getData(url);
   }
   else {
     print ("invalid argument");

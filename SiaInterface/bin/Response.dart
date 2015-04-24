@@ -1,17 +1,30 @@
+import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class Response {
   bool Success;
+  Map parsedMap;
   
-  Response.fromJSON(var o){
-    Map parsedMap = JSON.decode(o);
+  Response(var o) {
+    parsedMap = JSON.decode(o);
     Success = parsedMap["Success"];
   }
-  
+  static Response getData(String url) {
+    var res;
+    http.get(url).then((response) {
+//    print("Response status: ${response.statusCode}");
+//    print("Response body: ${response.body}");
+      res = new Response(response.body);
+      print(res.getSuccess());
+    });
+    return res;
+  }
   bool getSuccess(){
     return Success;
   }
-  
+  void printAll() {
+    print( parsedMap);
+  }
 }
 
 /*
@@ -33,76 +46,7 @@ class GatewayStatusResponse extends Response {
 //  Peers   []string
 }
 */
-class HostStatusResponse extends Response {
-  
-//      TotalStorage     int
-//      MinFilesize      int
-//      MaxFilesize      int
-//      MinDuration      int
-//      MaxDuration      int
-//      WindowSize       int
-//      Price            int
-//      Collateral       int
-//      StorageRemaining int
-//      NumContracts     int
-  
-  int TotalStorage;
-  int MinFilesize;
-  int MaxFilesize;
-  int MinDuration;
-  int MaxDuration;
-  int WindowSize;
-  int Price;
-  int Collateral;
-  int StorageRemaining;
-  int NumContracts;
-  
-  HostStatusResponse.fromJSON(var o) : super.fromJSON(o) {
-    Map parsedMap = JSON.decode(o);
-    TotalStorage = parsedMap["TotalStorage"];
-    MinFilesize = parsedMap["MinFilesize"];
-    MaxFilesize = parsedMap["MaxFilesize"];
-    MinDuration = parsedMap["MinDuration"];
-    MaxDuration = parsedMap["MaxDuration"];
-    WindowSize = parsedMap["WindowSize"];
-    Price = parsedMap["Price"];
-    Collateral = parsedMap["Collateral"];
-    StorageRemaining = parsedMap["StorageRemaining"];
-    NumContracts = parsedMap["NumContracts"];
-  }
-  
-  int getTotalStorage(){
-    return TotalStorage;
-  }
-  int getMinFilesize(){
-    return MinFilesize;
-  }
-  int getMaxFilesize(){
-    return MaxFilesize;
-  }
-  int getMinDuration(){
-    return MinDuration;
-  }
-  int getMaxDuration(){
-    return MaxDuration;
-  }
-  int getWindowSize(){
-    return WindowSize;
-  }
-  int getPrice(){
-    return Price;
-  }
-  int getCollateral(){
-    return Collateral;
-  }
-  int getStorageRemaining(){
-    return StorageRemaining;
-  }
-  int getNumContracts(){
-    return NumContracts;
-  }
-  
-}
+
 /*
 class HostDBHostsActiveRespose extends Response {
   
@@ -136,7 +80,7 @@ class RenterDownloadQueueResponse extends Response {
   String Destination;
   String Nickname;
   
-  RenterDownloadQueueResponse.fromJSON(var o) : super.fromJSON(o) {
+  RenterDownloadQueueResponse.fromJSON(var o) : super(o) {
     Map parsedMap = JSON.decode(o);
     Complete = parsedMap["Complete"];
     Filesize = parsedMap["Filesize"];
