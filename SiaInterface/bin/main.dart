@@ -226,10 +226,10 @@ void parseWallet (var args) {
 
 
 // Renter Global Variables
-DaemonUpdateCheck latestDaemonUpdateCheck;
-ConsensusStatus latestConsensusStatus;
+DaemonUpdateCheck latestDaemonUpdateCheck = new DaemonUpdateCheck(true, "0.0.1");
+ConsensusStatus latestConsensusStatus = new ConsensusStatus(10);
 
-MinerStatus latestMinerStatus;
+MinerStatus latestMinerStatus = new MinerStatus(true, "state", 10, 5);
 RenterDownloadQueue latestRenterDownloadQueue;
 RenterFiles latestRenterFiles;
 TransactionpoolTransactions latestTransactionpoolTransactions;
@@ -241,30 +241,30 @@ WalletStatus latestWalletStatus;
 DaemonUpdateCheck getDaemonUpdateCheck(){
   return latestDaemonUpdateCheck.copy();
 }
-ConsensusStatus getConsensusStatus(){
-  return latestConsensusStatus.copy();
-}
-MinerStatus getMinerStatus(){
-  return latestMinerStatus.copy();
-}
-RenterDownloadQueue getRenterDownloadQueue(){
-  return latestRenterDownloadQueue.copy();
-}
-RenterFiles getRenterFiles(){
-  return latestRenterFiles.copy();
-}
-TransactionpoolTransactions getTransactionpoolTransactions(){
-  return latestTransactionpoolTransactions.copy();
-}
-WalletAddress getWalletAddress(){
-  return latestWalletAddress.copy();
-}
-WalletSend getWalletSend(){
-  return latestWalletSend.copy();
-}
-WalletStatus getWalletStatus(){
-  return latestWalletStatus.copy();
-}
+//ConsensusStatus getConsensusStatus(){
+//  return latestConsensusStatus.copy();
+//}
+//MinerStatus getMinerStatus(){
+//  return latestMinerStatus.copy();
+//}
+//RenterDownloadQueue getRenterDownloadQueue(){
+//  return latestRenterDownloadQueue.copy();
+//}
+//RenterFiles getRenterFiles(){
+//  return latestRenterFiles.copy();
+//}
+//TransactionpoolTransactions getTransactionpoolTransactions(){
+//  return latestTransactionpoolTransactions.copy();
+//}
+//WalletAddress getWalletAddress(){
+//  return latestWalletAddress.copy();
+//}
+//WalletSend getWalletSend(){
+//  return latestWalletSend.copy();
+//}
+//WalletStatus getWalletStatus(){
+//  return latestWalletStatus.copy();
+//}
 
 
 
@@ -276,105 +276,109 @@ void updateGlobalVariables(Timer t){
 //   // rest of props
 // });
 // DaemonUpdateCheck latestDaemonUpdateCheck;
-  http.get("localhost:9980/daemon/update/check").then((response){
+  http.get("http://localhost:9980/daemon/update/check").then((response){
     var json = JSON.decode(response.body);
+    print(response.body);
     latestDaemonUpdateCheck.Available = json["Available"];
     latestDaemonUpdateCheck.Version = json["Version"];
   });
 // ConsensusStatus latestConsensusStatus;
-  http.get("localhost:9980/consensus/status").then((response){
+  http.get("http://localhost:9980/consensus/status").then((response){
     var json = JSON.decode(response.body);
+    print(response.body);
     latestConsensusStatus.Height = json["Height"];
   });
 // MinerStatus latestMinerStatus;
-  http.get("localhost:9980/miner/status").then((response){
+  http.get("http://localhost:9980/miner/status").then((response){
     var json = JSON.decode(response.body);
+    print(response.body);
     latestMinerStatus.Mining = json["Mining"];
     latestMinerStatus.State = json["State"];
     latestMinerStatus.Threads = json["Threads"];
     latestMinerStatus.RunningThreads = json["RunningThreads"];
   });
-// RenterDownloadQueue latestRenterDownloadQueue;
-  http.get("localhost:9980/renter/downloadqueue").then((response){
-    var json = JSON.decode(response.body);
-    latestRenterDownloadQueue.Complete = json["Complete"];
-    latestRenterDownloadQueue.Filesize = json["Filesize"];
-    latestRenterDownloadQueue.Destination = json["Destination"];
-    latestRenterDownloadQueue.Nickname = json["Nickname"];
-  });
-  
-// RenterFiles latestRenterFiles;
-  http.get("localhost:9980/renter/files").then((response){
-    var json = JSON.decode(response.body);
-    latestRenterFiles.Available = json["Available"];
-    latestRenterFiles.Nickname = json["Nickname"];
-    latestRenterFiles.Repairing = json["Repairing"];
-    latestRenterFiles.TimeRemaining = json["TimeRemaining"];
-  });
-// TransactionpoolTransactions latestTransactionpoolTransactions;
-  http.get("localhost:9980/transactionpool/transactions").then((response){
-    var json = JSON.decode(response.body);
-    latestTransactionpoolTransactions.Complete = json["Complete"];
-    latestTransactionpoolTransactions.Transactions = json["Transactions"];
-  });
-// WalletAddress latestWalletAddress;
-  http.get("localhost:9980/wallet/address").then((response){
-    var json = JSON.decode(response.body);
-    latestWalletAddress.Address = json["Address"];
-  });
-// WalletSend latestWalletSend;
-  http.get("localhost:9980/wallet/send").then((response){
-    var json = JSON.decode(response.body);
-    latestWalletSend.Amount = json["Amount"];
-    latestWalletSend.Destination = json["Destination"];
-
-  });
-// WalletStatus latestWalletStatus;
-  http.get("localhost:9980/wallet/status").then((response){
-    var json = JSON.decode(response.body);
-    latestWalletStatus.Balance = json["Balance"];
-    latestWalletStatus.FullBalance = json["FullBalance"];
-    latestWalletStatus.NumAddress = json["NumAddress"];
-  });
+//// RenterDownloadQueue latestRenterDownloadQueue;
+//  http.get("http://localhost:9980/renter/downloadqueue").then((response){
+//    var json = JSON.decode(response.body);
+//    latestRenterDownloadQueue.Complete = json["Complete"];
+//    latestRenterDownloadQueue.Filesize = json["Filesize"];
+//    latestRenterDownloadQueue.Destination = json["Destination"];
+//    latestRenterDownloadQueue.Nickname = json["Nickname"];
+//  });
+//  
+//// RenterFiles latestRenterFiles;
+//  http.get("http://localhost:9980/renter/files").then((response){
+//    var json = JSON.decode(response.body);
+//    latestRenterFiles.Available = json["Available"];
+//    latestRenterFiles.Nickname = json["Nickname"];
+//    latestRenterFiles.Repairing = json["Repairing"];
+//    latestRenterFiles.TimeRemaining = json["TimeRemaining"];
+//  });
+//// TransactionpoolTransactions latestTransactionpoolTransactions;
+//  http.get("http://localhost:9980/transactionpool/transactions").then((response){
+//    var json = JSON.decode(response.body);
+//    latestTransactionpoolTransactions.Complete = json["Complete"];
+//    latestTransactionpoolTransactions.Transactions = json["Transactions"];
+//  });
+//// WalletAddress latestWalletAddress;
+//  http.get("http://localhost:9980/wallet/address").then((response){
+//    var json = JSON.decode(response.body);
+//    latestWalletAddress.Address = json["Address"];
+//  });
+//// WalletSend latestWalletSend;
+//  http.get("http://localhost:9980/wallet/send").then((response){
+//    var json = JSON.decode(response.body);
+//    latestWalletSend.Amount = json["Amount"];
+//    latestWalletSend.Destination = json["Destination"];
+//
+//  });
+//// WalletStatus latestWalletStatus;
+//  http.get("http://localhost:9980/wallet/status").then((response){
+//    var json = JSON.decode(response.body);
+//    latestWalletStatus.Balance = json["Balance"];
+//    latestWalletStatus.FullBalance = json["FullBalance"];
+//    latestWalletStatus.NumAddress = json["NumAddress"];
+//  });
 }
 
 
 
 main(List<String> arguments) {
-  if (arguments.length == 0) {
-    print("Usage: <api-call> <args>");
-    return 0;
-  }
+//  if (arguments.length == 0) {
+//    print("Usage: <api-call> <args>");
+//    return 0;
+//  }
   // first arguement decides where to send it
   // $ dart main.dart host/config parameters
-  var request = arguments[0];
-  if (request.contains('daemon',0)) {
-    parseDaemon(arguments);
-  }
-  else if(request.contains('consensus',0)){
-    parseConsensus(arguments);
-  }
-  else if(request.contains('gateway',0)){
-//    put your function here
-  }
-  else if(request.contains('host',0)){
-    parseHost(arguments);
-  }
-  else if(request.contains('miner',0)){
-    parseMiner(arguments);
-  }
-  else if(request.contains('renter',0)){
-    parseRenter(arguments);
-  }
-  else if(request.contains('transactionpool',0)) {
-    parseTransactionPool(arguments);
-  }
-  else if(request.contains('wallet',0)){
-    parseWallet(arguments);
-  }
-  else{
-    print('invalid arguement');
-  }
+  
+//  var request = arguments[0];
+//  if (request.contains('daemon',0)) {
+//    parseDaemon(arguments);
+//  }
+//  else if(request.contains('consensus',0)){
+//    parseConsensus(arguments);
+//  }
+//  else if(request.contains('gateway',0)){
+////    put your function here
+//  }
+//  else if(request.contains('host',0)){
+//    parseHost(arguments);
+//  }
+//  else if(request.contains('miner',0)){
+//    parseMiner(arguments);
+//  }
+//  else if(request.contains('renter',0)){
+//    parseRenter(arguments);
+//  }
+//  else if(request.contains('transactionpool',0)) {
+//    parseTransactionPool(arguments);
+//  }
+//  else if(request.contains('wallet',0)){
+//    parseWallet(arguments);
+//  }
+//  else{
+//    print('invalid arguement');
+//  }
   Duration duration = new Duration(milliseconds:500);
   new Timer.periodic(duration, updateGlobalVariables);
   
