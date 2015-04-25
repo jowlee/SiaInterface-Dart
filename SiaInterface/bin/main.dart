@@ -4,7 +4,16 @@
 import 'package:SiaInterface/SiaInterface.dart' as SiaInterface;
 //import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'Daemon.dart';
+import 'Consensus.dart';
+import 'dart:async';
+
+
+import 'Miner.dart';
 import 'Renter.dart';
+import 'TransactionPool.dart';
+import 'Wallet.dart';
+
 import 'Host.dart';
 
 void outputInfo(var jsonString) {
@@ -17,6 +26,55 @@ bool assertSize(var args, int length, int name) {
   }
   return true;
 }
+
+
+void parseDaemon(var args) {
+  var request = args[0];
+  if (request.contains("stop", 6)) {
+    printResult(bool param){
+      if(param){
+        print("Works");
+      }
+      else{
+        print("Broken");
+      }
+    }
+    DaemonStop.stop(printResult);
+  }
+  else if (request.contains("update/apply", 6)) {
+    printResult(bool param){
+      if(param){
+        print("Works");
+      }
+      else{
+        print("Broken");
+      }
+    }
+    DaemonUpdateApply.updateApply(printResult);
+  }
+  else if (request.contains("update/check", 6)) {
+    print("Doing Daemon Update Check");
+    print("Availible: ${latestMinerStatus.Mining}");
+    print("Version: ${latestMinerStatus.State}");
+  }
+  else {
+    print ("invalid argument");
+  }
+}
+
+
+void parseConsensus(var args) {
+  var request = args[0];
+  if (request.contains("status", 9)) {
+    print("Doing Consensus Status");
+    print("Height: ${latestConsensusStatus.Height}");
+  }
+  else {
+    print ("invalid argument");
+  }
+}
+
+
 
 void parseHost(var args) {
   var request = args[0];
@@ -37,6 +95,42 @@ void parseHost(var args) {
   }
 }
 
+
+void parseMiner (var args) {
+  var request = args[0];
+  if (request.contains("start", 5)) {
+    printResult(bool param){
+          if(param){
+            print("Works");
+          }
+          else{
+            print("Broken");
+          }
+        }
+        MinerStart.start(printResult);
+  }
+  else if (request.contains("status", 4)) {
+    print("Doing Miner Status");
+    print("Mining: ${latestMinerStatus.Mining}");
+    print("State: ${latestMinerStatus.State}");
+    print("Threads: ${latestMinerStatus.Threads}");
+    print("RunningThreads: ${latestMinerStatus.RunningThreads}");
+  }
+  else if (request.contains("stop", 4)) {
+    printResult(bool param){
+          if(param){
+            print("Works");
+          }
+          else{
+            print("Broken");
+          }
+        }
+        MinerStop.stop(printResult);
+  }
+  else {
+    print ("invalid argument");
+  }
+}
 
 void parseRenter(var args) {
   var request = args[0];
@@ -91,17 +185,86 @@ void parseRenter(var args) {
   }
 }
 
+
+
+void parseTransactionPool (var args) {
+  var request = args[0];
+  print(request);
+  if (request.contains("transactions", 15)) {
+    print("Doing TransactionPool");
+    print("Transactions: ${latestTransactionpoolTransactions.Transactions}");
+  }
+  else {
+    print ("invalid argument");
+  }
+}
+void parseWallet (var args) {
+  var request = args[0];
+  print(request);
+  if (request.contains("address", 5)) {
+    print("Doing Wallet Adress");
+    print("Address: ${latestWalletAddress.Address}");
+  }
+  else if (request.contains("send", 5)) {
+    print("Doing Wallet Send");
+    print("Amount: ${latestWalletSend.Amount}");
+    print("Destinatoin: ${latestWalletSend.Destination}");
+
+  }
+  else if (request.contains("status", 5)) {
+    print("Doing wallet Status");
+    print("Balance: ${latestWalletStatus.Balance}");
+    print("Balance: ${latestWalletStatus.Balance}");
+    print("Balance: ${latestWalletStatus.Balance}");
+
+  }
+  else {
+    print ("invalid argument");
+  }
+}
+
+
 // Renter Global Variables
+DaemonUpdateCheck latestDaemonUpdateCheck;
+ConsensusStatus latestConsensusStatus;
+
+MinerStatus latestMinerStatus;
 RenterDownloadQueue latestRenterDownloadQueue;
 RenterFiles latestRenterFiles;
+TransactionpoolTransactions latestTransactionpoolTransactions;
+WalletAddress latestWalletAddress;
+WalletSend latestWalletSend;
+WalletStatus latestWalletStatus;
 
 // Renter Get Functions
+DaemonUpdateCheck getDaemonUpdateCheck(){
+  return latestDaemonUpdateCheck.copy();
+}
+ConsensusStatus getConsensusStatus(){
+  return latestConsensusStatus.copy();
+}
+MinerStatus getMinerStatus(){
+  return latestMinerStatus.copy();
+}
 RenterDownloadQueue getRenterDownloadQueue(){
   return latestRenterDownloadQueue.copy();
 }
 RenterFiles getRenterFiles(){
   return latestRenterFiles.copy();
 }
+TransactionpoolTransactions getTransactionpoolTransactions(){
+  return latestTransactionpoolTransactions.copy();
+}
+WalletAddress getWalletAddress(){
+  return latestWalletAddress.copy();
+}
+WalletSend getWalletSend(){
+  return latestWalletSend.copy();
+}
+WalletStatus getWalletStatus(){
+  return latestWalletStatus.copy();
+}
+
 
 main(List<String> arguments) {
   if (arguments.length == 0) {
@@ -112,10 +275,10 @@ main(List<String> arguments) {
   // $ dart main.dart host/config parameters
   var request = arguments[0];
   if (request.contains('daemon',0)) {
-    print("daemon");
+    parseDaemon(arguments);
   }
   else if(request.contains('consensus',0)){
-//    put your function here
+    parseConsensus(arguments);
   }
   else if(request.contains('gateway',0)){
 //    put your function here
@@ -124,19 +287,21 @@ main(List<String> arguments) {
     parseHost(arguments);
   }
   else if(request.contains('miner',0)){
-//    put your function here
+    parseMiner(arguments);
   }
   else if(request.contains('renter',0)){
     parseRenter(arguments);
   }
   else if(request.contains('transactionpool',0)) {
-//    put your function here
+    parseTransactionPool(arguments);
   }
   else if(request.contains('wallet',0)){
-//    put your function here
+    parseWallet(arguments);
   }
   else{
     print('invalid arguement');
   }
+  Duration duration = new Duration(milliseconds:500);
+  new Timer.periodic(duration, updateGlobalVariables);
   
 }
