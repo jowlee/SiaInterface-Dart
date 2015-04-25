@@ -230,41 +230,41 @@ DaemonUpdateCheck latestDaemonUpdateCheck = new DaemonUpdateCheck(true, "0.0.1")
 ConsensusStatus latestConsensusStatus = new ConsensusStatus(10);
 
 MinerStatus latestMinerStatus = new MinerStatus(true, "state", 10, 5);
-RenterDownloadQueue latestRenterDownloadQueue;
-RenterFiles latestRenterFiles;
-TransactionpoolTransactions latestTransactionpoolTransactions;
-WalletAddress latestWalletAddress;
-WalletSend latestWalletSend;
-WalletStatus latestWalletStatus;
+RenterDownloadQueue latestRenterDownloadQueue = new RenterDownloadQueue(true, 10, 10, "dest", "nickname");
+RenterFiles latestRenterFiles = new RenterFiles(true, "nickname", false, 0);
+TransactionpoolTransactions latestTransactionpoolTransactions= new TransactionpoolTransactions("transaction");
+WalletAddress latestWalletAddress = new WalletAddress("Address");
+WalletSend latestWalletSend = new WalletSend(10, "Dest");
+WalletStatus latestWalletStatus = new WalletStatus(10, 20, 123);
 
 // Renter Get Functions
 DaemonUpdateCheck getDaemonUpdateCheck(){
   return latestDaemonUpdateCheck.copy();
 }
-//ConsensusStatus getConsensusStatus(){
-//  return latestConsensusStatus.copy();
-//}
-//MinerStatus getMinerStatus(){
-//  return latestMinerStatus.copy();
-//}
-//RenterDownloadQueue getRenterDownloadQueue(){
-//  return latestRenterDownloadQueue.copy();
-//}
-//RenterFiles getRenterFiles(){
-//  return latestRenterFiles.copy();
-//}
-//TransactionpoolTransactions getTransactionpoolTransactions(){
-//  return latestTransactionpoolTransactions.copy();
-//}
-//WalletAddress getWalletAddress(){
-//  return latestWalletAddress.copy();
-//}
-//WalletSend getWalletSend(){
-//  return latestWalletSend.copy();
-//}
-//WalletStatus getWalletStatus(){
-//  return latestWalletStatus.copy();
-//}
+ConsensusStatus getConsensusStatus(){
+  return latestConsensusStatus.copy();
+}
+MinerStatus getMinerStatus(){
+  return latestMinerStatus.copy();
+}
+RenterDownloadQueue getRenterDownloadQueue(){
+  return latestRenterDownloadQueue.copy();
+}
+RenterFiles getRenterFiles(){
+  return latestRenterFiles.copy();
+}
+TransactionpoolTransactions getTransactionpoolTransactions(){
+  return latestTransactionpoolTransactions.copy();
+}
+WalletAddress getWalletAddress(){
+  return latestWalletAddress.copy();
+}
+WalletSend getWalletSend(){
+  return latestWalletSend.copy();
+}
+WalletStatus getWalletStatus(){
+  return latestWalletStatus.copy();
+}
 
 
 
@@ -283,11 +283,13 @@ void updateGlobalVariables(Timer t){
     latestDaemonUpdateCheck.Version = json["Version"];
   });
 // ConsensusStatus latestConsensusStatus;
+
   http.get("http://localhost:9980/consensus/status").then((response){
     var json = JSON.decode(response.body);
     print(response.body);
     latestConsensusStatus.Height = json["Height"];
   });
+  
 // MinerStatus latestMinerStatus;
   http.get("http://localhost:9980/miner/status").then((response){
     var json = JSON.decode(response.body);
@@ -297,48 +299,53 @@ void updateGlobalVariables(Timer t){
     latestMinerStatus.Threads = json["Threads"];
     latestMinerStatus.RunningThreads = json["RunningThreads"];
   });
-//// RenterDownloadQueue latestRenterDownloadQueue;
-//  http.get("http://localhost:9980/renter/downloadqueue").then((response){
-//    var json = JSON.decode(response.body);
+// RenterDownloadQueue latestRenterDownloadQueue;
+  http.get("http://localhost:9980/renter/downloadqueue").then((response){
+    var json = JSON.decode(response.body);
+    print(response.body);
+    //May or may not have the parameters plus more for each
 //    latestRenterDownloadQueue.Complete = json["Complete"];
 //    latestRenterDownloadQueue.Filesize = json["Filesize"];
 //    latestRenterDownloadQueue.Destination = json["Destination"];
 //    latestRenterDownloadQueue.Nickname = json["Nickname"];
-//  });
-//  
-//// RenterFiles latestRenterFiles;
-//  http.get("http://localhost:9980/renter/files").then((response){
-//    var json = JSON.decode(response.body);
+  });
+
+  // RenterFiles latestRenterFiles;
+  http.get("http://localhost:9980/renter/files").then((response){
+    var json = JSON.decode(response.body);
+    //May or may not have the parameters plus more for each
+
 //    latestRenterFiles.Available = json["Available"];
 //    latestRenterFiles.Nickname = json["Nickname"];
 //    latestRenterFiles.Repairing = json["Repairing"];
 //    latestRenterFiles.TimeRemaining = json["TimeRemaining"];
-//  });
-//// TransactionpoolTransactions latestTransactionpoolTransactions;
-//  http.get("http://localhost:9980/transactionpool/transactions").then((response){
-//    var json = JSON.decode(response.body);
-//    latestTransactionpoolTransactions.Complete = json["Complete"];
-//    latestTransactionpoolTransactions.Transactions = json["Transactions"];
-//  });
-//// WalletAddress latestWalletAddress;
-//  http.get("http://localhost:9980/wallet/address").then((response){
-//    var json = JSON.decode(response.body);
-//    latestWalletAddress.Address = json["Address"];
-//  });
-//// WalletSend latestWalletSend;
-//  http.get("http://localhost:9980/wallet/send").then((response){
-//    var json = JSON.decode(response.body);
-//    latestWalletSend.Amount = json["Amount"];
-//    latestWalletSend.Destination = json["Destination"];
-//
-//  });
-//// WalletStatus latestWalletStatus;
-//  http.get("http://localhost:9980/wallet/status").then((response){
-//    var json = JSON.decode(response.body);
-//    latestWalletStatus.Balance = json["Balance"];
-//    latestWalletStatus.FullBalance = json["FullBalance"];
-//    latestWalletStatus.NumAddress = json["NumAddress"];
-//  });
+  });
+// TransactionpoolTransactions latestTransactionpoolTransactions;
+  http.get("http://localhost:9980/transactionpool/transactions").then((response){
+    var json = JSON.decode(response.body);
+    latestTransactionpoolTransactions.Complete = json["Complete"];
+    latestTransactionpoolTransactions.Transactions = json["Transactions"];
+  });
+// WalletAddress latestWalletAddress;
+  http.get("http://localhost:9980/wallet/address").then((response){
+    var json = JSON.decode(response.body);
+    latestWalletAddress.Address = json["Address"];
+  });
+// WalletSend latestWalletSend;
+  http.get("http://localhost:9980/wallet/send").then((response){
+    var json = JSON.decode(response.body);
+    latestWalletSend.Amount = json["Amount"];
+    latestWalletSend.Destination = json["Destination"];
+
+  });
+// WalletStatus latestWalletStatus;
+  http.get("http://localhost:9980/wallet/status").then((response){
+    var json = JSON.decode(response.body);
+    latestWalletStatus.Balance = json["Balance"];
+    latestWalletStatus.FullBalance = json["FullBalance"];
+    latestWalletStatus.NumAddress = json["NumAddress"];
+  });
+
 }
 
 
