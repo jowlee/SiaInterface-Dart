@@ -52,32 +52,55 @@ void parseRenter(var args) {
   else if (request.contains("download", 6)) {
     var nickname = args[1];
     var destination = args[2];    
-    Renter.download(nickname, destination);
+    printResult(bool param){
+      if(param){
+        print("Works");
+      }
+      else{
+        print("Broken");
+      }
+    }
+    RenterDownload.download(nickname, destination, printResult);
 
   }
   
   else if (request.contains("files", 6)) {
-    Renter.files();
+    print("Doing RenterFiles");
+        print("Available: ${latestRenterFiles.Available}");
+        print("Nickname: ${latestRenterFiles.Nickname}");
+        print("Repairing: ${latestRenterFiles.Repairing}");
+        print("TimeRemaining: ${latestRenterFiles.TimeRemaining}");
   }
   
   else if (request.contains("upload", 6)) {
     var source = args[1];
     var nickname = args[2];
-    Renter.upload(source, nickname);
+    printResult(bool param){
+      if(param){
+        print("Works");
+      }
+      else{
+        print("Broken");
+      }
+    }
+    RenterUpload.upload(source, nickname, printResult);
   }
   
   else {
     print ("invalid argument");
   }
 }
-// Renter Get Functions
-
-RenterDownloadQueue latestRenterDownloadQueue;
 
 // Renter Global Variables
+RenterDownloadQueue latestRenterDownloadQueue;
+RenterFiles latestRenterFiles;
 
+// Renter Get Functions
 RenterDownloadQueue getRenterDownloadQueue(){
   return latestRenterDownloadQueue.copy();
+}
+RenterFiles getRenterFiles(){
+  return latestRenterFiles.copy();
 }
 
 main(List<String> arguments) {
