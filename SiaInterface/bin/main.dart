@@ -3,6 +3,7 @@
 
 import 'package:SiaInterface/SiaInterface.dart' as SiaInterface;
 //import 'dart:io';
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'Daemon.dart';
 import 'Consensus.dart';
@@ -264,6 +265,79 @@ WalletSend getWalletSend(){
 WalletStatus getWalletStatus(){
   return latestWalletStatus.copy();
 }
+
+
+
+// Timer approach
+void updateGlobalVariables(Timer t){
+// http.get("localhost:9980/host/status").then((response){
+//   var json = JSON.decode(response.body);
+//   latestHostStatus.TotalStorage = json["TotalStorage"];
+//   // rest of props
+// });
+// DaemonUpdateCheck latestDaemonUpdateCheck;
+  http.get("localhost:9980/daemon/update/check").then((response){
+    var json = JSON.decode(response.body);
+    latestDaemonUpdateCheck.Available = json["Available"];
+    latestDaemonUpdateCheck.Version = json["Version"];
+  });
+// ConsensusStatus latestConsensusStatus;
+  http.get("localhost:9980/consensus/status").then((response){
+    var json = JSON.decode(response.body);
+    latestConsensusStatus.Height = json["Height"];
+  });
+// MinerStatus latestMinerStatus;
+  http.get("localhost:9980/miner/status").then((response){
+    var json = JSON.decode(response.body);
+    latestMinerStatus.Mining = json["Mining"];
+    latestMinerStatus.State = json["State"];
+    latestMinerStatus.Threads = json["Threads"];
+    latestMinerStatus.RunningThreads = json["RunningThreads"];
+  });
+// RenterDownloadQueue latestRenterDownloadQueue;
+  http.get("localhost:9980/renter/downloadqueue").then((response){
+    var json = JSON.decode(response.body);
+    latestRenterDownloadQueue.Complete = json["Complete"];
+    latestRenterDownloadQueue.Filesize = json["Filesize"];
+    latestRenterDownloadQueue.Destination = json["Destination"];
+    latestRenterDownloadQueue.Nickname = json["Nickname"];
+  });
+  
+// RenterFiles latestRenterFiles;
+  http.get("localhost:9980/renter/files").then((response){
+    var json = JSON.decode(response.body);
+    latestRenterFiles.Available = json["Available"];
+    latestRenterFiles.Nickname = json["Nickname"];
+    latestRenterFiles.Repairing = json["Repairing"];
+    latestRenterFiles.TimeRemaining = json["TimeRemaining"];
+  });
+// TransactionpoolTransactions latestTransactionpoolTransactions;
+  http.get("localhost:9980/transactionpool/transactions").then((response){
+    var json = JSON.decode(response.body);
+    latestTransactionpoolTransactions.Complete = json["Complete"];
+    latestTransactionpoolTransactions.Transactions = json["Transactions"];
+  });
+// WalletAddress latestWalletAddress;
+  http.get("localhost:9980/wallet/address").then((response){
+    var json = JSON.decode(response.body);
+    latestWalletAddress.Address = json["Address"];
+  });
+// WalletSend latestWalletSend;
+  http.get("localhost:9980/wallet/send").then((response){
+    var json = JSON.decode(response.body);
+    latestWalletSend.Amount = json["Amount"];
+    latestWalletSend.Destination = json["Destination"];
+
+  });
+// WalletStatus latestWalletStatus;
+  http.get("localhost:9980/wallet/status").then((response){
+    var json = JSON.decode(response.body);
+    latestWalletStatus.Balance = json["Balance"];
+    latestWalletStatus.FullBalance = json["FullBalance"];
+    latestWalletStatus.NumAddress = json["NumAddress"];
+  });
+}
+
 
 
 main(List<String> arguments) {
