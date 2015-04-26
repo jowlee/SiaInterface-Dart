@@ -7,12 +7,12 @@ class RenterDownload {
   
   static void download(String nickname, String destination, Function onFinish) {
       var url = "http://localhost:9980/renter/download";
-      url += '?nickname=nickname&destination=destination';    // Addition of Parameters
+      url += '?nickname=${nickname}&destination=${destination}';    // Addition of Parameters
       http.get(url).then((response) {
         print("Response status: ${response.statusCode}");
         print("Response body: ${response.body}"); 
         Map parsedMap = JSON.decode(response.body);
-        onFinish(parsedMap["success"]);
+        onFinish(parsedMap["Success"]);
        });
     }
 }
@@ -32,12 +32,12 @@ class RenterUpload{
   
   static void upload(String source, String nickname, Function onFinish) {
       var url = "http://localhost:9980/renter/upload";
-      url += '?source=source&nickname=nickname';    // Addition of Parameters
+      url += '?source=${source}&nickname=${nickname}';    // Addition of Parameters
       http.get(url).then((response) {
         print("Response status: ${response.statusCode}");
         print("Response body: ${response.body}"); 
         Map parsedMap = JSON.decode(response.body);
-        onFinish(parsedMap["success"]);
+        onFinish(parsedMap["Success"]);
        });
     }
 }

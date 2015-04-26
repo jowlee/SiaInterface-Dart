@@ -1,4 +1,6 @@
 library Wallet;
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class WalletAddress {
   String Address;
@@ -7,11 +9,17 @@ class WalletAddress {
 }
 
 class WalletSend{
-  int Amount;
-  String Destination;
 
-  WalletSend(this.Amount, this.Destination);
-  WalletSend copy() => new WalletSend(Amount, Destination);
+  static void send(int Amount, String Destination, Function onFinish) {
+      var url = "http://localhost:9980/wallet/send";
+      url += '?Amount=${Amount}&Destination=${Destination}';    // Addition of Parameters
+      http.get(url).then((response) {
+        print("Response status: ${response.statusCode}");
+        print("Response body: ${response.body}"); 
+        Map parsedMap = JSON.decode(response.body);
+        onFinish(parsedMap["Success"]);
+       });
+    }
 }
 
 
