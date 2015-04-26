@@ -345,7 +345,6 @@ void updateGlobalVariables(Timer t){
     latestWalletStatus.FullBalance = json["FullBalance"];
     latestWalletStatus.NumAddress = json["NumAddress"];
   });
-
 }
 
 
