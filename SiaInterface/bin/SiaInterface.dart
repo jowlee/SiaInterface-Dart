@@ -81,15 +81,42 @@ void parseHost(var args) {
   var request = args[0];
   if (request.contains("announce", 4)) {
     if (!assertSize(args, 0, request)) {return;}
-    Host.announce();
+    printResult(bool param){
+          if(param){
+            print("Works");
+          }
+          else{
+            print("Broken");
+          }
+        }
+        HostAnnounce.announce(printResult);
   }
   else if (request.contains("config", 4)) {
     if (!assertSize(args, 8, request)) {return;}
-    Host.config(args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]);
+    printResult(bool param){
+              if(param){
+                print("Works");
+              }
+              else{
+                print("Broken");
+              }
+            }
+    HostConfig.config(args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], printResult);
   }
   else if (request.contains("status", 4)) {
     if (!assertSize(args, 0, request)) {return;}
-    Host.status();
+    HostStatus currentHostStatus = getHostStatus();
+    print("Doing Host Status");
+    print("TotalStorage: ${currentHostStatus.TotalStorage}");
+    print("MinFilesize: ${currentHostStatus.MinFilesize}");
+    print("MaxFilesize: ${currentHostStatus.MaxFileSize}");
+    print("MinDuration: ${currentHostStatus.MinDuration}");
+    print("MaxDuration: ${currentHostStatus.MaxDuration}");
+    print("WindowSize: ${currentHostStatus.WindowSize}");
+    print("Price: ${currentHostStatus.Price}");
+    print("Collateral: ${currentHostStatus.Collateral}");
+    print("StorageRemaining: ${currentHostStatus.StorageRemaining}");
+    print("NumContracts: ${currentHostStatus.NumContracts}");
   }
   else {
     print ("invalid argument");
@@ -270,6 +297,9 @@ DaemonUpdateCheck getDaemonUpdateCheck(){
 ConsensusStatus getConsensusStatus(){
   return latestConsensusStatus.copy();
 }
+HostStatus getHostStatus() {
+  return latestHostStatus.copy();
+}
 MinerStatus getMinerStatus(){
   return latestMinerStatus.copy();
 }
@@ -300,6 +330,20 @@ void updateGlobalVariables(Timer t){
 //   // rest of props
 // });
 // DaemonUpdateCheck latestDaemonUpdateCheck;
+  http.get("http://localhost:9980/host/status").then((response){
+      var json = JSON.decode(response.body);
+      print(response.body);
+      latestHostStatus.TotalStorage = json["TotalStorage"];
+      latestHostStatus.MinFilesize  = json["MinFilesize"];
+      latestHostStatus.MaxFileSize = json["MaxFileSize"];
+      latestHostStatus.MinDuration = json["MinDuration"];
+      latestHostStatus.MaxDuration = json["MaxDuration"];
+      latestHostStatus.WindowSize = json["WindowSize"];
+      latestHostStatus.Price = json["Price"];
+      latestHostStatus.Collateral = json["Collateral"];
+      latestHostStatus.StorageRemaining = json["StorageRemaining"];
+      latestHostStatus.NumContracts = json["NumContracts"];
+    });
   http.get("http://localhost:9980/daemon/update/check").then((response){
     var json = JSON.decode(response.body);
     print(response.body);
