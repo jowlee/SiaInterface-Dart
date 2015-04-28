@@ -1,4 +1,4 @@
-library Consensus;
+library SiaInterface.Consensus;
 
 
 class ConsensusStatus{

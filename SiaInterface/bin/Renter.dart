@@ -1,4 +1,4 @@
-library Renter;
+library SiaInterface.Renter;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 

@@ -1,4 +1,4 @@
-library Host;
+library SiaInterface.Host;
 import 'Response.dart';
 
 class HostAnnounceResponse extends Response {

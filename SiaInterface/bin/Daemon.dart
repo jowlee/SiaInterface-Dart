@@ -1,4 +1,4 @@
-library Daemon;
+library SiaInterface.Daemon;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 

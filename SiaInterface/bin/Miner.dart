@@ -1,4 +1,4 @@
-library Miner;
+library SiaInterface.Miner;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
