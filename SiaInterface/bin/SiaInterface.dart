@@ -1,25 +1,24 @@
 // Copyright (c) 2015, <Joseph Lee>. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
-import 'package:SiaInterface/SiaInterface.dart' as SiaInterface;
+library SiaInterface;
+//import 'package:SiaInterface/SiaInterface.dart' as SiaInterface;
 //import 'dart:io';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'Daemon.dart';
-import 'Consensus.dart';
 import 'dart:async';
 
+import 'Daemon.dart';
+import 'Consensus.dart';
+
+import 'Host.dart';
 
 import 'Miner.dart';
 import 'Renter.dart';
 import 'TransactionPool.dart';
 import 'Wallet.dart';
 
-import 'Host.dart';
 
-void outputInfo(var jsonString) {
-  print(jsonString.body);
-}
 bool assertSize(var args, int length, int name) {
   if (args.length-1 != length) {
     print("$name should have $length parameter(s)");
@@ -54,9 +53,10 @@ void parseDaemon(var args) {
     DaemonUpdateApply.updateApply(printResult);
   }
   else if (request.contains("update/check", 6)) {
+    DaemonUpdateCheck currentDaemoncheck = getDaemonUpdateCheck();
     print("Doing Daemon Update Check");
-    print("Availible: ${latestMinerStatus.Mining}");
-    print("Version: ${latestMinerStatus.State}");
+    print("Availible: ${currentDaemoncheck.Available}");
+    print("Version: ${currentDaemoncheck.Version}");
   }
   else {
     print ("invalid argument");
@@ -67,8 +67,9 @@ void parseDaemon(var args) {
 void parseConsensus(var args) {
   var request = args[0];
   if (request.contains("status", 9)) {
+    ConsensusStatus currnetConsensusStatus = getConsensusStatus();
     print("Doing Consensus Status");
-    print("Height: ${latestConsensusStatus.Height}");
+    print("Height: ${currnetConsensusStatus.Height}");
   }
   else {
     print ("invalid argument");
@@ -111,11 +112,12 @@ void parseMiner (var args) {
         MinerStart.start(printResult);
   }
   else if (request.contains("status", 4)) {
+    MinerStatus currentMinerStatus = getMinerStatus();
     print("Doing Miner Status");
-    print("Mining: ${latestMinerStatus.Mining}");
-    print("State: ${latestMinerStatus.State}");
-    print("Threads: ${latestMinerStatus.Threads}");
-    print("RunningThreads: ${latestMinerStatus.RunningThreads}");
+    print("Mining: ${currentMinerStatus.Mining}");
+    print("State: ${currentMinerStatus.State}");
+    print("Threads: ${currentMinerStatus.Threads}");
+    print("RunningThreads: ${currentMinerStatus.RunningThreads}");
   }
   else if (request.contains("stop", 4)) {
     printResult(bool param){
@@ -137,11 +139,12 @@ void parseRenter(var args) {
   var request = args[0];
   print(request);
   if (request.contains("downloadqueue", 6)) {
+    RenterDownloadQueue currentDownloadQueue = getRenterDownloadQueue();
     print("Doing Downloadqueue");
-    print("Filesize: ${latestRenterDownloadQueue.Filesize}");
-    print("Received: ${latestRenterDownloadQueue.Received}");
-    print("Destination: ${latestRenterDownloadQueue.Destination}");
-    print("Nickname: ${latestRenterDownloadQueue.Nickname}");
+    print("Filesize: ${currentDownloadQueue.Filesize}");
+    print("Received: ${currentDownloadQueue.Received}");
+    print("Destination: ${currentDownloadQueue.Destination}");
+    print("Nickname: ${currentDownloadQueue.Nickname}");
   }
   
   else if (request.contains("download", 6)) {
@@ -160,11 +163,12 @@ void parseRenter(var args) {
   }
   
   else if (request.contains("files", 6)) {
+    RenterFiles currentRenterFiles = getRenterFiles();
     print("Doing RenterFiles");
-        print("Available: ${latestRenterFiles.Available}");
-        print("Nickname: ${latestRenterFiles.Nickname}");
-        print("Repairing: ${latestRenterFiles.Repairing}");
-        print("TimeRemaining: ${latestRenterFiles.TimeRemaining}");
+    print("Available: ${currentRenterFiles.Available}");
+    print("Nickname: ${currentRenterFiles.Nickname}");
+    print("Repairing: ${currentRenterFiles.Repairing}");
+    print("TimeRemaining: ${currentRenterFiles.TimeRemaining}");
   }
   
   else if (request.contains("upload", 6)) {
@@ -192,8 +196,9 @@ void parseTransactionPool (var args) {
   var request = args[0];
   print(request);
   if (request.contains("transactions", 15)) {
+    TransactionpoolTransactions currentTransPool = getTransactionpoolTransactions();
     print("Doing TransactionPool");
-    print("Transactions: ${latestTransactionpoolTransactions.Transactions}");
+    print("Transactions: ${currentTransPool.Transactions}");
   }
   else {
     print ("invalid argument");
@@ -203,20 +208,29 @@ void parseWallet (var args) {
   var request = args[0];
   print(request);
   if (request.contains("address", 5)) {
+    WalletAddress currentWalletAddress = getWalletAddress();
     print("Doing Wallet Adress");
-    print("Address: ${latestWalletAddress.Address}");
+    print("Address: ${currentWalletAddress.Address}");
   }
   else if (request.contains("send", 5)) {
-    print("Doing Wallet Send");
-    print("Amount: ${latestWalletSend.Amount}");
-    print("Destinatoin: ${latestWalletSend.Destination}");
-
+    var Amount = args[1];
+        var Destination = args[2];
+        printResult(bool param){
+          if(param){
+            print("Works");
+          }
+          else{
+            print("Broken");
+          }
+        }
+        WalletSend.send(Amount, Destination, printResult);
   }
   else if (request.contains("status", 5)) {
+    WalletStatus currentWalletStatus = getWalletStatus();
     print("Doing wallet Status");
-    print("Balance: ${latestWalletStatus.Balance}");
-    print("Balance: ${latestWalletStatus.Balance}");
-    print("Balance: ${latestWalletStatus.Balance}");
+    print("Balance: ${currentWalletStatus.Balance}");
+    print("Balance: ${currentWalletStatus.Balance}");
+    print("Balance: ${currentWalletStatus.Balance}");
 
   }
   else {
@@ -234,7 +248,6 @@ RenterDownloadQueue latestRenterDownloadQueue = new RenterDownloadQueue(true, 10
 RenterFiles latestRenterFiles = new RenterFiles(true, "nickname", false, 0);
 TransactionpoolTransactions latestTransactionpoolTransactions= new TransactionpoolTransactions("transaction");
 WalletAddress latestWalletAddress = new WalletAddress("Address");
-WalletSend latestWalletSend = new WalletSend(10, "Dest");
 WalletStatus latestWalletStatus = new WalletStatus(10, 20, 123);
 
 // Renter Get Functions
@@ -259,9 +272,7 @@ TransactionpoolTransactions getTransactionpoolTransactions(){
 WalletAddress getWalletAddress(){
   return latestWalletAddress.copy();
 }
-WalletSend getWalletSend(){
-  return latestWalletSend.copy();
-}
+
 WalletStatus getWalletStatus(){
   return latestWalletStatus.copy();
 }
@@ -331,13 +342,7 @@ void updateGlobalVariables(Timer t){
     var json = JSON.decode(response.body);
     latestWalletAddress.Address = json["Address"];
   });
-// WalletSend latestWalletSend;
-  http.get("http://localhost:9980/wallet/send").then((response){
-    var json = JSON.decode(response.body);
-    latestWalletSend.Amount = json["Amount"];
-    latestWalletSend.Destination = json["Destination"];
-
-  });
+  
 // WalletStatus latestWalletStatus;
   http.get("http://localhost:9980/wallet/status").then((response){
     var json = JSON.decode(response.body);
@@ -345,7 +350,6 @@ void updateGlobalVariables(Timer t){
     latestWalletStatus.FullBalance = json["FullBalance"];
     latestWalletStatus.NumAddress = json["NumAddress"];
   });
-
 }
 
 
@@ -358,35 +362,35 @@ main(List<String> arguments) {
   // first arguement decides where to send it
   // $ dart main.dart host/config parameters
   
-//  var request = arguments[0];
-//  if (request.contains('daemon',0)) {
-//    parseDaemon(arguments);
-//  }
-//  else if(request.contains('consensus',0)){
-//    parseConsensus(arguments);
-//  }
-//  else if(request.contains('gateway',0)){
-////    put your function here
-//  }
-//  else if(request.contains('host',0)){
-//    parseHost(arguments);
-//  }
-//  else if(request.contains('miner',0)){
-//    parseMiner(arguments);
-//  }
-//  else if(request.contains('renter',0)){
-//    parseRenter(arguments);
-//  }
-//  else if(request.contains('transactionpool',0)) {
-//    parseTransactionPool(arguments);
-//  }
-//  else if(request.contains('wallet',0)){
-//    parseWallet(arguments);
-//  }
-//  else{
-//    print('invalid arguement');
-//  }
-  Duration duration = new Duration(milliseconds:500);
-  new Timer.periodic(duration, updateGlobalVariables);
+  var request = arguments[0];
+  if (request.contains('daemon',0)) {
+    parseDaemon(arguments);
+  }
+  else if(request.contains('consensus',0)){
+    parseConsensus(arguments);
+  }
+  else if(request.contains('gateway',0)){
+//    put your function here
+  }
+  else if(request.contains('host',0)){
+    parseHost(arguments);
+  }
+  else if(request.contains('miner',0)){
+    parseMiner(arguments);
+  }
+  else if(request.contains('renter',0)){
+    parseRenter(arguments);
+  }
+  else if(request.contains('transactionpool',0)) {
+    parseTransactionPool(arguments);
+  }
+  else if(request.contains('wallet',0)){
+    parseWallet(arguments);
+  }
+  else{
+    print('invalid arguement');
+  }
+//  Duration duration = new Duration(milliseconds:500);
+//  new Timer.periodic(duration, updateGlobalVariables);
   
 }

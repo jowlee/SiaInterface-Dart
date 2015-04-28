@@ -1,4 +1,4 @@
-library Daemon;
+library SiaInterface.Daemon;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -9,7 +9,7 @@ class DaemonStop {
         print("Response status: ${response.statusCode}");
         print("Response body: ${response.body}"); 
         Map parsedMap = JSON.decode(response.body);
-        onFinish(parsedMap["success"]);
+        onFinish(parsedMap["Success"]);
        });
     }
 }
@@ -22,7 +22,7 @@ class DaemonUpdateApply{
         print("Response status: ${response.statusCode}");
         print("Response body: ${response.body}"); 
         Map parsedMap = JSON.decode(response.body);
-        onFinish(parsedMap["success"]);
+        onFinish(parsedMap["Success"]);
        });
     }
 }

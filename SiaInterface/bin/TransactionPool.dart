@@ -1,4 +1,4 @@
-library Transactionpool;
+library SiaInterface.Transactionpool;
 
 class TransactionpoolTransactions{
   bool Complete;

@@ -1,4 +1,4 @@
-library Miner;
+library SiaInterface.Miner;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -9,7 +9,7 @@ class MinerStart {
         print("Response status: ${response.statusCode}");
         print("Response body: ${response.body}"); 
         Map parsedMap = JSON.decode(response.body);
-        onFinish(parsedMap["success"]);
+        onFinish(parsedMap["Success"]);
        });
     }
 }
@@ -33,7 +33,7 @@ class MinerStop{
         print("Response status: ${response.statusCode}");
         print("Response body: ${response.body}"); 
         Map parsedMap = JSON.decode(response.body);
-        onFinish(parsedMap["success"]);
+        onFinish(parsedMap["Success"]);
        });
     }
 }
