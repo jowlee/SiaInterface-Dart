@@ -74,6 +74,52 @@ void parseConsensus(var args) {
     print ("invalid argument");
   }
 }
+void parseGateway(var args) {
+  var request = args[0];
+  if (request.contains("status", 6)) {
+    if (!assertSize(args, 0, request)) {return;}
+    GatewayStatus currentGatewayStatus = getGatewayStatus();
+    print("Address: ${currentGatewayStatus.Address}");
+  }
+  else if (request.contains("synchronize", 6)) {
+    if (!assertSize(args, 0, request)) {return;}
+    printResult(bool param){
+          if(param){
+            print("Works");
+          }
+          else{
+            print("Broken");
+          }
+        }
+        GatewaySynchronize.synchronize(printResult);
+  }
+  else if (request.contains("peer/add", 6)) {
+    if (!assertSize(args, 1, request)) {return;}
+    printResult(bool param){
+          if(param){
+            print("Works");
+          }
+          else{
+            print("Broken");
+          }
+        }
+        GatewayPeer.add(args[1], printResult);
+  }
+  else if (request.contains("peer/remove", 6)) {
+      if (!assertSize(args, 1, request)) {return;}
+      printResult(bool param){
+            if(param){
+              print("Works");
+            }
+            else{
+              print("Broken");
+            }
+          }
+        GatewayPeer.remove(args[1], printResult);
+    }
+  else {
+    print("Invalid argument");
+  }
 
 
 
@@ -296,6 +342,9 @@ DaemonUpdateCheck getDaemonUpdateCheck(){
 }
 ConsensusStatus getConsensusStatus(){
   return latestConsensusStatus.copy();
+}
+GatewayStatus getGatewayStatus() {
+  return latestGatewayStatus.copy();
 }
 HostStatus getHostStatus() {
   return latestHostStatus.copy();
