@@ -3,6 +3,10 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class MinerStart {
+  bool Success;
+  MinerStart(this.Success);
+  MinerStart copy() => new MinerStart(Success);
+  
   static void start(Function onFinish) {
       var url = "http://localhost:9980/miner/start";
       http.get(url).then((response) {
@@ -27,6 +31,10 @@ class MinerStatus{
 }
 
 class MinerStop{
+  bool Success;
+  MinerStop(this.Success);
+  MinerStop copy() => new MinerStop(Success);
+  
   static void stop(Function onFinish) {
       var url = "http://localhost:9980/miner/stop";
       http.get(url).then((response) {

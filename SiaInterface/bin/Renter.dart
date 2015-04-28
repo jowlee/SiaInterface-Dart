@@ -4,7 +4,9 @@ import 'dart:convert';
 
 class RenterDownload {
   bool Success;
-  
+  RenterDownload(this.Success);
+  RenterDownload copy() => new RenterDownload(Success);
+    
   static void download(String nickname, String destination, Function onFinish) {
       var url = "http://localhost:9980/renter/download";
       url += '?nickname=${nickname}&destination=${destination}';    // Addition of Parameters
@@ -29,6 +31,9 @@ class RenterDownloadQueue{
 
 
 class RenterUpload{
+  bool Success;
+  RenterUpload(this.Success);
+  RenterUpload copy() => new RenterUpload(Success);
   
   static void upload(String source, String nickname, Function onFinish) {
       var url = "http://localhost:9980/renter/upload";

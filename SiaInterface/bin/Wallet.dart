@@ -9,7 +9,10 @@ class WalletAddress {
 }
 
 class WalletSend{
-
+  String Address;
+  WalletSend(this.Address);
+  WalletSend copy() => new WalletSend(Address);
+  
   static void send(int Amount, String Destination, Function onFinish) {
       var url = "http://localhost:9980/wallet/send";
       url += '?Amount=${Amount}&Destination=${Destination}';    // Addition of Parameters

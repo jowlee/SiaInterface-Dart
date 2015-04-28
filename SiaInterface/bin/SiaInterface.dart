@@ -10,9 +10,8 @@ import 'dart:async';
 
 import 'Daemon.dart';
 import 'Consensus.dart';
-
 import 'Host.dart';
-
+import 'Gateway.dart';
 import 'Miner.dart';
 import 'Renter.dart';
 import 'TransactionPool.dart';
@@ -240,14 +239,28 @@ void parseWallet (var args) {
 
 
 // Renter Global Variables
+
+DaemonStop latestDaemonStop = new DaemonStop(true);
+DaemonUpdateApply latestDaemonUpdateApply = new DaemonUpdateApply(true);
 DaemonUpdateCheck latestDaemonUpdateCheck = new DaemonUpdateCheck(true, "0.0.1");
 ConsensusStatus latestConsensusStatus = new ConsensusStatus(10);
-
+GatewayStatus latestGatewayStatus = new GatewayStatus("address", new List<String>());
+GatewaySynchronize latestGatewaySynchronize = new GatewaySynchronize(true);
+GatewayPeer latestGatewayPeer = new GatewayPeer(true);
+HostAnnounce latestHostAnnounce = new HostAnnounce(true);
+HostConfig latestHostConfig = new HostConfig(true);
+HostStatus latestHostStatus = new HostStatus(29, 0, 3006, 0, 49, 288, 3, 0, 0, 29);
+HostDBHostsActive latestHostDBHostsActive = new HostDBHostsActive();
+MinerStart latestMinerStart = new MinerStart(true);
 MinerStatus latestMinerStatus = new MinerStatus(true, "state", 10, 5);
+MinerStop latestMinerStop = new MinerStop(true);
+RenterDownload latestRenterDownload = new RenterDownload(true);
 RenterDownloadQueue latestRenterDownloadQueue = new RenterDownloadQueue(true, 10, 10, "dest", "nickname");
+RenterUpload latestRenterUpload = new RenterUpload(true);
 RenterFiles latestRenterFiles = new RenterFiles(true, "nickname", false, 0);
 TransactionpoolTransactions latestTransactionpoolTransactions= new TransactionpoolTransactions("transaction");
 WalletAddress latestWalletAddress = new WalletAddress("Address");
+WalletSend latestWalletSend = new WalletSend("Address");
 WalletStatus latestWalletStatus = new WalletStatus(10, 20, 123);
 
 // Renter Get Functions

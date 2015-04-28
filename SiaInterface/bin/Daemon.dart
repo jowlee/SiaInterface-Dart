@@ -3,6 +3,10 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class DaemonStop {
+  bool Success;
+  DaemonStop(this.Success);
+  DaemonStop copy() => new DaemonStop(this.Success);
+
   static void stop(Function onFinish) {
       var url = "http://localhost:9980/daemon/stop";
       http.get(url).then((response) {
@@ -15,6 +19,9 @@ class DaemonStop {
 }
 
 class DaemonUpdateApply{
+  bool Success;
+  DaemonUpdateApply(this.Success);
+  DaemonUpdateApply copy() => new DaemonUpdateApply(this.Success);
   
   static void updateApply(Function onFinish) {
       var url = "http://localhost:9980/daemon/update/apply";
