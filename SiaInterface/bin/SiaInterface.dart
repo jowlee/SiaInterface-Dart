@@ -476,7 +476,7 @@ main(List<String> arguments) {
     parseConsensus(arguments);
   }
   else if(request.contains('gateway',0)){
-//    put your function here
+    parseGateway(arguments);
   }
   else if(request.contains('host',0)){
     parseHost(arguments);
