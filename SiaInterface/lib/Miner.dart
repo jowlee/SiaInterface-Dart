@@ -25,10 +25,10 @@ class MinerStatus extends Abstract{
   String State;
   int Threads;
   int RunningThreads;
-  // [32]byte  Address
+  String Address;     // [32]byte  Address
 
-  MinerStatus(Map jsonFormat, this.Mining, this.State, this.Threads, this.RunningThreads ) : super(jsonFormat);
-  MinerStatus copy() => new MinerStatus(jsonFormat, Mining, State, Threads, RunningThreads);
+  MinerStatus(Map jsonFormat, this.Mining, this.State, this.Threads, this.RunningThreads, this.Address ) : super(jsonFormat);
+  MinerStatus copy() => new MinerStatus(jsonFormat, Mining, State, Threads, RunningThreads, Address);
 }
 
 class MinerStop extends Abstract{

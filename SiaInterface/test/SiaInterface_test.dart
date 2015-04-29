@@ -9,9 +9,5 @@ import 'package:SiaInterface/SiaInterface.dart';
 void main() => defineTests();
 
 void defineTests() {
-  group('main tests', () {
-    test('calculate', () {
-      expect(calculate(), 42);
-    });
-  });
+  
 }
