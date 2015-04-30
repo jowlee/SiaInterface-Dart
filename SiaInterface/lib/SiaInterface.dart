@@ -85,9 +85,8 @@ void updateGlobalVariables(Timer t){
   
   http.get("http://localhost:9980/host/status").then((response){
      var json = JSON.decode(response.body);
-     if(!(latestWalletStatus.changeNotify(json))){
+     if(!(latestHostStatus.changeNotify(json))){
        print(response.body);
-       latestHostStatus.jsonFormat = json;
        latestHostStatus.TotalStorage = json["TotalStorage"];
        latestHostStatus.MinFilesize  = json["MinFilesize"];
        latestHostStatus.MaxFileSize = json["MaxFileSize"];
@@ -104,20 +103,17 @@ void updateGlobalVariables(Timer t){
   // DaemonUpdateCheck latestDaemonUpdateCheck;
   http.get("http://localhost:9980/daemon/update/check").then((response){
     var json = JSON.decode(response.body);
-    if(!(latestWalletStatus.changeNotify(json))){
+    if(!(latestDaemonUpdateCheck.changeNotify(json))){
       print(response.body);
-      latestDaemonUpdateCheck.jsonFormat = json;
       latestDaemonUpdateCheck.Available = json["Available"];
       latestDaemonUpdateCheck.Version = json["Version"];
     }
   });
-  /*
   // ConsensusStatus latestConsensusStatus;
   http.get("http://localhost:9980/consensus/status").then((response){
     var json = JSON.decode(response.body);
-    if(!(latestWalletStatus.changeNotify(json))){
+    if(!(latestConsensusStatus.changeNotify(json))){
       print(response.body);
-      latestConsensusStatus.jsonFormat = json;
       latestConsensusStatus.Height = json["Height"];
     }
   });
@@ -125,9 +121,8 @@ void updateGlobalVariables(Timer t){
   // MinerStatus latestMinerStatus;
   http.get("http://localhost:9980/miner/status").then((response){
     var json = JSON.decode(response.body);
-    if(!(latestWalletStatus.changeNotify(json))){
+    if(!(latestMinerStatus.changeNotify(json))){
       print(response.body);
-      latestMinerStatus.jsonFormat = json;
       latestMinerStatus.Mining = json["Mining"];
       latestMinerStatus.State = json["State"];
       latestMinerStatus.Threads = json["Threads"];
@@ -139,10 +134,8 @@ void updateGlobalVariables(Timer t){
   http.get("http://localhost:9980/renter/downloadqueue").then((response){
     var json = JSON.decode(response.body);
     //May or may not have the parameters plus more for each
-    if(!(latestWalletStatus.changeNotify(json))){
+    if(!(latestRenterDownloadQueue.changeNotify(json))){
       print(response.body);
-      latestRenterDownloadQueue.jsonFormat = json;
-
   //    latestRenterDownloadQueue.Complete = json["Complete"];
   //    latestRenterDownloadQueue.Filesize = json["Filesize"];
   //    latestRenterDownloadQueue.Destination = json["Destination"];
@@ -154,9 +147,8 @@ void updateGlobalVariables(Timer t){
   http.get("http://localhost:9980/renter/files").then((response){
     var json = JSON.decode(response.body);
     //May or may not have the parameters plus more for each
-    if(!(latestWalletStatus.changeNotify(json))){
+    if(!(latestRenterFiles.changeNotify(json))){
       print(response.body);
-      latestRenterFiles.jsonFormat = json;      
 
   //    latestRenterFiles.Available = json["Available"];
   //    latestRenterFiles.Nickname = json["Nickname"];
@@ -168,34 +160,31 @@ void updateGlobalVariables(Timer t){
   // TransactionpoolTransactions latestTransactionpoolTransactions;
   http.get("http://localhost:9980/transactionpool/transactions").then((response){
     var json = JSON.decode(response.body);
-    if(!(latestWalletStatus.changeNotify(json))){
+    if(!(latestTransactionpoolTransactions.changeNotify(json))){
       print(response.body);
-      latestTransactionpoolTransactions.jsonFormat = json;
       latestTransactionpoolTransactions.Complete = json["Complete"];
       latestTransactionpoolTransactions.Transactions = json["Transactions"];
     }
-  });  
+  }); 
 
 // WalletAddress latestWalletAddress;
   http.get("http://localhost:9980/wallet/address").then((response){
     var json = JSON.decode(response.body);
-    if(!(latestWalletStatus.changeNotify(json))){
+    if(!(latestWalletAddress.changeNotify(json))){
       print(response.body);
-      latestWalletAddress.jsonFormat = json;
       latestWalletAddress.Address = json["Address"];
     }
-  });
+  }); 
   // WalletStatus latestWalletStatus;
   http.get("http://localhost:9980/wallet/status").then((response){
     var json = JSON.decode(response.body);
     if(!(latestWalletStatus.changeNotify(json))){
       print(response.body);
-      latestWalletStatus.jsonFormat = json;
       latestWalletStatus.Balance = json["Balance"];
       latestWalletStatus.FullBalance = json["FullBalance"];
       latestWalletStatus.NumAddress = json["NumAddress"];
     }
-  });*/
+  });
 }
 
 void update(){

@@ -7,8 +7,8 @@ class Response{
     jsonFormat = JSON.encode(input);
   }
 
-  bool changeNotify(Map json){
-    String jsonData = JSON.encode(json);
+  bool changeNotify(Map jsonResponse){
+    String jsonData = JSON.encode(jsonResponse);
 
     if(jsonData == this.jsonFormat){
      return true;
