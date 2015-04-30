@@ -1,11 +1,11 @@
 library SiaInterface.Daemon;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'Abstract.dart';
+import 'Response.dart';
 
-class DaemonStop extends Abstract {
+class DaemonStop extends Response {
   bool Success;
-  DaemonStop(Map jsonFormat, this.Success) : super(jsonFormat);
+  DaemonStop(String jsonFormat, this.Success) : super(jsonFormat);
   DaemonStop copy() => new DaemonStop(jsonFormat, this.Success);
 
   static void stop(Function onFinish) {
@@ -19,9 +19,9 @@ class DaemonStop extends Abstract {
     }
 }
 
-class DaemonUpdateApply extends Abstract{
+class DaemonUpdateApply extends Response{
   bool Success;
-  DaemonUpdateApply(Map jsonFormat, this.Success) : super(jsonFormat);
+  DaemonUpdateApply(String jsonFormat, this.Success) : super(jsonFormat);
   DaemonUpdateApply copy() => new DaemonUpdateApply(jsonFormat, this.Success);
   
   static void updateApply(Function onFinish) {
@@ -35,12 +35,13 @@ class DaemonUpdateApply extends Abstract{
     }
 }
 
-class DaemonUpdateCheck extends Abstract{
+class DaemonUpdateCheck extends Response{
   bool Available;
   String Version;
 
-  DaemonUpdateCheck(Map jsonFormat,this.Available, this.Version) : super(jsonFormat);
+  DaemonUpdateCheck(String jsonFormat,this.Available, this.Version) : super(jsonFormat);
   DaemonUpdateCheck copy() => new DaemonUpdateCheck(jsonFormat, this.Available, this.Version);
+ 
 }
 
 

@@ -2,11 +2,11 @@ library SiaInterface.Host;
 
 import 'package:http/http.dart' as http;
 import "dart:convert";
-import 'Abstract.dart';
+import 'Response.dart';
 
-class HostAnnounce extends Abstract {
+class HostAnnounce extends Response {
   bool Success;
-  HostAnnounce(Map jsonFormat, this.Success) : super(jsonFormat);
+  HostAnnounce(String jsonFormat, this.Success) : super(jsonFormat);
   HostAnnounce copy() => new HostAnnounce(jsonFormat, this.Success);
   
   static void announce(Function onFinish) {
@@ -20,9 +20,9 @@ class HostAnnounce extends Abstract {
   }
 }
 
-class HostConfig extends Abstract {
+class HostConfig extends Response {
   bool Success;
-  HostConfig(Map jsonFormat, this.Success) : super(jsonFormat);
+  HostConfig(String jsonFormat, this.Success) : super(jsonFormat);
   HostConfig copy() => new HostConfig(jsonFormat, Success);
   
   static void config(String TotalStorage, String MinFilesize, String MaxFileSize, String MinDuration, String MaxDuration, String WindowSize, String Price, String Collateral, Function onFinish) {
@@ -37,7 +37,7 @@ class HostConfig extends Abstract {
   }
 }
 
-class HostStatus extends Abstract {
+class HostStatus extends Response {
   int TotalStorage;
   int MinFilesize;
   int MaxFileSize;
@@ -49,12 +49,11 @@ class HostStatus extends Abstract {
   int StorageRemaining;
   int NumContracts;
   
-  HostStatus(Map jsonFormat, this.TotalStorage, this.MinFilesize, this.MaxFileSize, this.MinDuration, this.MaxDuration, this.WindowSize, this.Price, this.Collateral, this.StorageRemaining, this.NumContracts) : super(jsonFormat);
+  HostStatus(String jsonFormat, this.TotalStorage, this.MinFilesize, this.MaxFileSize, this.MinDuration, this.MaxDuration, this.WindowSize, this.Price, this.Collateral, this.StorageRemaining, this.NumContracts) : super(jsonFormat);
   HostStatus copy() => new HostStatus(jsonFormat, this.TotalStorage, this.MinFilesize, this.MaxFileSize, this.MinDuration, this.MaxDuration, this.WindowSize, this.Price, this.Collateral, this.StorageRemaining, this.NumContracts);
 
   void parseUpdate(Map json){
     if(json == this.jsonFormat)
-    this.jsonFormat = json;
     this.TotalStorage = json["TotalStorage"];
     this.MinFilesize  = json["MinFilesize"];
     this.MaxFileSize = json["MaxFileSize"];
@@ -66,11 +65,12 @@ class HostStatus extends Abstract {
     this.StorageRemaining = json["StorageRemaining"];
     this.NumContracts = json["NumContracts"];
   }
+
 }
-class HostDBHostsActive extends Abstract {
+class HostDBHostsActive extends Response {
   //unclear type
   List<String> Entries;   //  List<HostEntry> Entries = null;
-  HostDBHostsActive(Map jsonFormat, this.Entries) : super(jsonFormat);
+  HostDBHostsActive(String jsonFormat, this.Entries) : super(jsonFormat);
   HostDBHostsActive copy() => new HostDBHostsActive(jsonFormat, this.Entries);
 
   

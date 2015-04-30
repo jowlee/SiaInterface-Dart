@@ -7,7 +7,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
-import 'Abstract.dart';
 import 'Daemon.dart';
 import 'Consensus.dart';
 import 'Host.dart';
@@ -19,7 +18,7 @@ import 'Wallet.dart';
 
 // Global Variables
 
-Map temp = null;
+String temp = null;
 
 DaemonStop latestDaemonStop = new DaemonStop(temp, true);
 DaemonUpdateApply latestDaemonUpdateApply = new DaemonUpdateApply(temp, true);
@@ -89,7 +88,6 @@ void updateGlobalVariables(Timer t){
      if(!(latestWalletStatus.changeNotify(json))){
        print(response.body);
        latestHostStatus.jsonFormat = json;
-//       latestHostStatus.updateHash(Abstract.getHashCode(json));
        latestHostStatus.TotalStorage = json["TotalStorage"];
        latestHostStatus.MinFilesize  = json["MinFilesize"];
        latestHostStatus.MaxFileSize = json["MaxFileSize"];
@@ -108,7 +106,6 @@ void updateGlobalVariables(Timer t){
     var json = JSON.decode(response.body);
     if(!(latestWalletStatus.changeNotify(json))){
       print(response.body);
-//      latestDaemonUpdateCheck.updateHash(Abstract.getHashCode(json));
       latestDaemonUpdateCheck.jsonFormat = json;
       latestDaemonUpdateCheck.Available = json["Available"];
       latestDaemonUpdateCheck.Version = json["Version"];
@@ -119,7 +116,7 @@ void updateGlobalVariables(Timer t){
   http.get("http://localhost:9980/consensus/status").then((response){
     var json = JSON.decode(response.body);
     if(!(latestWalletStatus.changeNotify(json))){
-//      print(response.body);
+      print(response.body);
       latestConsensusStatus.jsonFormat = json;
       latestConsensusStatus.Height = json["Height"];
     }
@@ -129,7 +126,7 @@ void updateGlobalVariables(Timer t){
   http.get("http://localhost:9980/miner/status").then((response){
     var json = JSON.decode(response.body);
     if(!(latestWalletStatus.changeNotify(json))){
-//      print(response.body);
+      print(response.body);
       latestMinerStatus.jsonFormat = json;
       latestMinerStatus.Mining = json["Mining"];
       latestMinerStatus.State = json["State"];
@@ -143,7 +140,7 @@ void updateGlobalVariables(Timer t){
     var json = JSON.decode(response.body);
     //May or may not have the parameters plus more for each
     if(!(latestWalletStatus.changeNotify(json))){
-//      print(response.body);
+      print(response.body);
       latestRenterDownloadQueue.jsonFormat = json;
 
   //    latestRenterDownloadQueue.Complete = json["Complete"];
@@ -158,7 +155,7 @@ void updateGlobalVariables(Timer t){
     var json = JSON.decode(response.body);
     //May or may not have the parameters plus more for each
     if(!(latestWalletStatus.changeNotify(json))){
-//      print(response.body);
+      print(response.body);
       latestRenterFiles.jsonFormat = json;      
 
   //    latestRenterFiles.Available = json["Available"];
@@ -172,35 +169,33 @@ void updateGlobalVariables(Timer t){
   http.get("http://localhost:9980/transactionpool/transactions").then((response){
     var json = JSON.decode(response.body);
     if(!(latestWalletStatus.changeNotify(json))){
-//      print(response.body);
+      print(response.body);
       latestTransactionpoolTransactions.jsonFormat = json;
       latestTransactionpoolTransactions.Complete = json["Complete"];
       latestTransactionpoolTransactions.Transactions = json["Transactions"];
     }
-  });
+  });  
 
 // WalletAddress latestWalletAddress;
   http.get("http://localhost:9980/wallet/address").then((response){
     var json = JSON.decode(response.body);
     if(!(latestWalletStatus.changeNotify(json))){
-//      print(response.body);
-//      int code = Abstract.getHashCode(json);
+      print(response.body);
       latestWalletAddress.jsonFormat = json;
       latestWalletAddress.Address = json["Address"];
     }
   });
-
   // WalletStatus latestWalletStatus;
   http.get("http://localhost:9980/wallet/status").then((response){
     var json = JSON.decode(response.body);
     if(!(latestWalletStatus.changeNotify(json))){
-//      print(response.body);
+      print(response.body);
       latestWalletStatus.jsonFormat = json;
       latestWalletStatus.Balance = json["Balance"];
       latestWalletStatus.FullBalance = json["FullBalance"];
       latestWalletStatus.NumAddress = json["NumAddress"];
     }
-  }); */
+  });*/
 }
 
 void update(){

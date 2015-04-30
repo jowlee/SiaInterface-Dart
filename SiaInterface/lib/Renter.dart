@@ -1,11 +1,11 @@
 library SiaInterface.Renter;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'Abstract.dart';
+import 'Response.dart';
 
-class RenterDownload extends Abstract{
+class RenterDownload extends Response{
   bool Success;
-  RenterDownload(Map jsonFormat, this.Success) : super(jsonFormat);
+  RenterDownload(String jsonFormat, this.Success) : super(jsonFormat);
   RenterDownload copy() => new RenterDownload(jsonFormat, Success);
     
   static void download(String nickname, String destination, Function onFinish) {
@@ -20,20 +20,20 @@ class RenterDownload extends Abstract{
     }
 }
 
-class RenterDownloadQueue extends Abstract{
+class RenterDownloadQueue extends Response{
   bool Complete;
   var Filesize;
   var Received;
   String Destination;
   String Nickname;
-  RenterDownloadQueue(Map jsonFormat, this.Complete, this.Filesize, this.Received, this.Destination, this.Nickname) : super(jsonFormat);
+  RenterDownloadQueue(String jsonFormat, this.Complete, this.Filesize, this.Received, this.Destination, this.Nickname) : super(jsonFormat);
   RenterDownloadQueue copy() => new RenterDownloadQueue(jsonFormat, Complete, Filesize, Received, Destination, Nickname);
 }
 
 
-class RenterUpload extends Abstract{
+class RenterUpload extends Response{
   bool Success;
-  RenterUpload(Map jsonFormat, this.Success) : super(jsonFormat);
+  RenterUpload(String jsonFormat, this.Success) : super(jsonFormat);
   RenterUpload copy() => new RenterUpload(jsonFormat, Success);
   
   static void upload(String source, String nickname, Function onFinish) {
@@ -48,13 +48,13 @@ class RenterUpload extends Abstract{
     }
 }
   
-class RenterFiles extends Abstract {
+class RenterFiles extends Response {
   bool Available;
   String Nickname;
   bool Repairing;
   int TimeRemaining;
   
-  RenterFiles(Map jsonFormat, this.Available, this.Nickname, this.Repairing, this.TimeRemaining) : super(jsonFormat);
+  RenterFiles(String jsonFormat, this.Available, this.Nickname, this.Repairing, this.TimeRemaining) : super(jsonFormat);
   RenterFiles copy() => new RenterFiles(jsonFormat, Available, Nickname, Repairing, TimeRemaining);
   
 }

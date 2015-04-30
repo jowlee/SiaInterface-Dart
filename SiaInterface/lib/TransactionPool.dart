@@ -1,9 +1,9 @@
 library SiaInterface.Transactionpool;
-import 'Abstract.dart';
+import 'Response.dart';
 
-class TransactionpoolTransactions extends Abstract {
+class TransactionpoolTransactions extends Response {
   bool Complete;
   var Transactions;
-  TransactionpoolTransactions(Map jsonFormat, this.Transactions) :super(jsonFormat);
+  TransactionpoolTransactions(String jsonFormat, this.Transactions) :super(jsonFormat);
   TransactionpoolTransactions copy() => new TransactionpoolTransactions(jsonFormat, Transactions);
 }

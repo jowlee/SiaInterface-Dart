@@ -1,17 +1,17 @@
 library SiaInterface.Wallet;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'Abstract.dart';
+import 'Response.dart';
 
-class WalletAddress extends Abstract {
+class WalletAddress extends Response {
   String Address;
-  WalletAddress(Map jsonFormat, this.Address) :super(jsonFormat);
+  WalletAddress(String jsonFormat, this.Address) :super(jsonFormat);
   WalletAddress copy() => new WalletAddress(jsonFormat, Address);
 }
 
-class WalletSend extends Abstract {
+class WalletSend extends Response {
   String Address;
-  WalletSend(Map jsonFormat, this.Address) :super(jsonFormat);
+  WalletSend(String jsonFormat, this.Address) :super(jsonFormat);
   WalletSend copy() => new WalletSend(jsonFormat, Address);
   
   static void send(int Amount, String Destination, Function onFinish) {
@@ -27,14 +27,13 @@ class WalletSend extends Abstract {
 }
 
 
-class WalletStatus extends Abstract {
+class WalletStatus extends Response {
   int Balance;
   int FullBalance;
   int NumAddress;
 
-  WalletStatus(Map jsonFormat, this.Balance, this.FullBalance, this.NumAddress) :super(jsonFormat);
+  WalletStatus(String jsonFormat, this.Balance, this.FullBalance, this.NumAddress) :super(jsonFormat);
   WalletStatus copy() => new WalletStatus(jsonFormat, Balance, FullBalance, NumAddress);
-
 
 }
   
