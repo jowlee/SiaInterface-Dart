@@ -15,7 +15,7 @@ SiaInterface.update();
 This is pulls data from the server and makes a call every 500 milliseconds to retrieve new data.   
 Every data point is updated with this function.   
   
-To retrieve information, call: SiaInterface.getSomeFunctionName()
+To retrieve information, call: SiaInterface.getSomeFunctionName()  
 These functions return objects with accessable variables
 - getDaemonUpdateCheck()
   * Available bool
