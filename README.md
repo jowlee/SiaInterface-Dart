@@ -18,14 +18,48 @@ Every data point is updated with this function.
 To retrieve information, call: SiaInterface.getSomeFunctionName()
 These functions return objects with accessable variables
 - getDaemonUpdateCheck()
+  * Available bool
+  * Version   string
 - getConsensusStatus()
+  * Height       int
+  * CurrentBlock [32]byte
+  * Target       [32]byte
 - getHostStatus() 
+  * TotalStorage     int
+  * MinFilesize      int
+  * MaxFilesize      int
+  * MinDuration      int
+  * MaxDuration      int
+  * WindowSize       int
+  * Price            int
+  * Collateral       int
+  * StorageRemaining int
+  * NumContracts     int
 - getMinerStatus()
+  * Mining         bool
+  * State          string
+  * Threads        int
+  * RunningThreads int
+  * Address        [32]byte
 - getRenterDownloadQueue()
+  * Complete    bool
+  * Filesize    uint64
+  * Received    uint64
+  * Destination string
+  * Nickname    string
 - getRenterFiles()
+  * Available       bool
+  * Nickname        String
+  * Repairing       bool
+  * TimeRemaining   int
 - getTransactionpoolTransactions()
+  * Transactions []consensus.Transaction
 - getWalletAddress()
+  * Address string
 - getWalletStatus()
+  * Balance      int
+  * FullBalance  int
+  * NumAddresses int
   
 i.e.  To retrive these variables, call: SiaInterface.getRenterFiles().Nickname
   
