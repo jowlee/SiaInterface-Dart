@@ -1,23 +1,24 @@
 library SiaInterface.Gateway;
 import 'package:http/http.dart' as http;
 import "dart:convert";
+import 'Response.dart';
 
-class GatewayStatus {
+class GatewayStatus extends Response{
 //  NetAddress Address;
   String Address;
   List<String> peers;
-  GatewayStatus(this.Address, this.peers);
-  GatewayStatus copy() => new GatewayStatus(Address, peers);
+  GatewayStatus(String jsonFormat, this.Address, this.peers) : super(jsonFormat);
+  GatewayStatus copy() => new GatewayStatus(jsonFormat, this.Address, this.peers);
 }
-class GatewaySynchronize {
+class GatewaySynchronize extends Response {
   bool Success;
-  GatewaySynchronize(this.Success);
-  GatewaySynchronize copy() => new GatewaySynchronize(Success);
+  GatewaySynchronize(String jsonFormat, this.Success) : super(jsonFormat);
+  GatewaySynchronize copy() => new GatewaySynchronize(jsonFormat, this.Success);
 }
-class GatewayPeer {
+class GatewayPeer extends Response {
   bool Success;
-  GatewayPeer(this.Success);
-  GatewayPeer copy() => new GatewayPeer(Success);
+  GatewayPeer(String jsonFormat, this.Success) : super(jsonFormat);
+  GatewayPeer copy() => new GatewayPeer(jsonFormat, this.Success);
   
   static void add(String address, Function onFinish) {
     var url = "http://localhost:9980/host/config";

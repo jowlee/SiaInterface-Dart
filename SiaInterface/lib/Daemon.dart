@@ -1,8 +1,13 @@
 library SiaInterface.Daemon;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'Response.dart';
 
-class DaemonStop {
+class DaemonStop extends Response {
+  bool Success;
+  DaemonStop(String jsonFormat, this.Success) : super(jsonFormat);
+  DaemonStop copy() => new DaemonStop(jsonFormat, this.Success);
+
   static void stop(Function onFinish) {
       var url = "http://localhost:9980/daemon/stop";
       http.get(url).then((response) {
@@ -14,7 +19,10 @@ class DaemonStop {
     }
 }
 
-class DaemonUpdateApply{
+class DaemonUpdateApply extends Response{
+  bool Success;
+  DaemonUpdateApply(String jsonFormat, this.Success) : super(jsonFormat);
+  DaemonUpdateApply copy() => new DaemonUpdateApply(jsonFormat, this.Success);
   
   static void updateApply(Function onFinish) {
       var url = "http://localhost:9980/daemon/update/apply";
@@ -27,12 +35,13 @@ class DaemonUpdateApply{
     }
 }
 
-class DaemonUpdateCheck{
+class DaemonUpdateCheck extends Response{
   bool Available;
   String Version;
 
-  DaemonUpdateCheck(this.Available, this.Version);
-  DaemonUpdateCheck copy() => new DaemonUpdateCheck(Available, Version);
+  DaemonUpdateCheck(String jsonFormat,this.Available, this.Version) : super(jsonFormat);
+  DaemonUpdateCheck copy() => new DaemonUpdateCheck(jsonFormat, this.Available, this.Version);
+ 
 }
 
 
