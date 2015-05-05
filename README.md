@@ -61,6 +61,10 @@ These functions return objects with accessable variables
   * FullBalance  int
   * NumAddresses int
   
+To send information to the server
+Call the class group, then the class and its static method 
+example:
+Host.HostConfig.config(TotalStorage, MinFilesize, MaxFileSize, MinDuration, MaxDuration, WindowSize, Price, Collateral, onFinish);
 i.e.  To retrive these variables, call: SiaInterface.getRenterFiles().Nickname
   
       
