@@ -55,13 +55,129 @@ class RenterFiles extends Response {
   int TimeRemaining;
   
   RenterFiles(String jsonFormat, this.Available, this.Nickname, this.Repairing, this.TimeRemaining) : super(jsonFormat);
-  RenterFiles copy() => new RenterFiles(jsonFormat, Available, Nickname, Repairing, TimeRemaining);
-  
+  RenterFiles copy() => new RenterFiles(jsonFormat, Available, Nickname, Repairing, TimeRemaining);  
 }
 
+class RenterFilesDelete extends Response {
+  bool Success;
+  RenterFilesDelete(String jsonFormat, this.Success) : super(jsonFormat);
+  RenterFilesDelete copy() => new RenterFilesDelete(jsonFormat, Success);
+  
+  static void delete(String nickname, Function onFinish) {
+        var url = "http://localhost:9980/renter/upload";
+        url += '?nickname=${nickname}';    // Addition of Parameters
+        http.get(url).then((response) {
+          print("Response status: ${response.statusCode}");
+          print("Response body: ${response.body}"); 
+          Map parsedMap = JSON.decode(response.body);
+          onFinish(parsedMap["Success"]);
+        });
+  }
+}
 
+/*class RenterFilesList extends Response {
+  bool Available;
+  String Nickname;
+  bool Repairing;
+  int TimeRemaining;
+  
+  bool Success;
+  RenterFilesList(String jsonFormat, this.Success) : super(jsonFormat);
+  RenterFilesList copy() => new RenterFilesList(jsonFormat, Success);
+  
+  static void list() {
+        var url = "http://localhost:9980/renter/upload";
+        url += '?nickname=${nickname}';    // Addition of Parameters
+        http.get(url).then((response) {
+          print("Response status: ${response.statusCode}");
+          print("Response body: ${response.body}"); 
+          Map parsedMap = JSON.decode(response.body);
+          onFinish(parsedMap["Success"]);
+        });
+  }
+}*/
 
+class RenterFilesLoad extends Response {
+  bool Success;
+  RenterFilesLoad(String jsonFormat, this.Success) : super(jsonFormat);
+  RenterFilesLoad copy() => new RenterFilesLoad(jsonFormat, Success);
+  
+  static void load(String filename, Function onFinish) {
+        var url = "http://localhost:9980/renter/upload";
+        url += '?filename=${filename}';    // Addition of Parameters
+        http.get(url).then((response) {
+          print("Response status: ${response.statusCode}");
+          print("Response body: ${response.body}"); 
+          Map parsedMap = JSON.decode(response.body);
+          onFinish(parsedMap["Success"]);
+        });
+  }
+}
 
+class RenterFilesLoadAscii extends Response {
+  bool Success;
+  RenterFilesLoadAscii(String jsonFormat, this.Success) : super(jsonFormat);
+  RenterFilesLoadAscii copy() => new RenterFilesLoadAscii(jsonFormat, Success);
+  
+  static void loadAscii(String file, Function onFinish) {
+        var url = "http://localhost:9980/renter/upload";
+        url += '?file=${file}';    // Addition of Parameters
+        http.get(url).then((response) {
+          print("Response status: ${response.statusCode}");
+          print("Response body: ${response.body}"); 
+          Map parsedMap = JSON.decode(response.body);
+          onFinish(parsedMap["Success"]);
+        });
+  }
+}
 
+class RenterFilesRename extends Response {
+  bool Success;
+  RenterFilesRename(String jsonFormat, this.Success) : super(jsonFormat);
+  RenterFilesRename copy() => new RenterFilesRename(jsonFormat, Success);
+  
+  static void rename(String nickname, String newname, Function onFinish) {
+        var url = "http://localhost:9980/renter/upload";
+        url += '?nickname=${nickname}&newname=${newname}';    // Addition of Parameters
+        http.get(url).then((response) {
+          print("Response status: ${response.statusCode}");
+          print("Response body: ${response.body}"); 
+          Map parsedMap = JSON.decode(response.body);
+          onFinish(parsedMap["Success"]);
+        });
+  }
+}
 
+class RenterFilesShare extends Response {
+  bool Success;
+  RenterFilesShare(String jsonFormat, this.Success) : super(jsonFormat);
+  RenterFilesShare copy() => new RenterFilesShare(jsonFormat, Success);
+  
+  static void share(String nickname, String filepath, Function onFinish) {
+        var url = "http://localhost:9980/renter/upload";
+        url += '?nickname=${nickname}&filepath=${filepath}';    // Addition of Parameters
+        http.get(url).then((response) {
+          print("Response status: ${response.statusCode}");
+          print("Response body: ${response.body}"); 
+          Map parsedMap = JSON.decode(response.body);
+          onFinish(parsedMap["Success"]);
+        });
+  }
+}
 
+class RenterFilesShareAscii extends Response {
+  bool Success;
+  RenterFilesShareAscii(String jsonFormat, this.Success) : super(jsonFormat);
+  RenterFilesShareAscii copy() => new RenterFilesShareAscii(jsonFormat, Success);
+  
+  static void shareAscii(String nickname, Function onFinish) {
+        var url = "http://localhost:9980/renter/upload";
+        url += '?nickname=${nickname}';    // Addition of Parameters
+        http.get(url).then((response) {
+          print("Response status: ${response.statusCode}");
+          print("Response body: ${response.body}"); 
+          Map parsedMap = JSON.decode(response.body);
+          onFinish(parsedMap["Success"]);
+        });
+  }
+}
