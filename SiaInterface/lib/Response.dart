@@ -9,7 +9,6 @@ class Response{
 
   bool changeNotify(Map jsonResponse){
     String jsonData = JSON.encode(jsonResponse);
-
     if(jsonData == this.jsonFormat){
      return true;
     }

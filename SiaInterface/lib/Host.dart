@@ -54,6 +54,7 @@ class HostStatus extends Response {
 
   void parseUpdate(Map json){
     if(json == this.jsonFormat)
+    print("Works!!!");
     this.TotalStorage = json["TotalStorage"];
     this.MinFilesize  = json["MinFilesize"];
     this.MaxFileSize = json["MaxFileSize"];

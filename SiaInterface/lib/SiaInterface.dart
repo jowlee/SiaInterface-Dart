@@ -19,25 +19,24 @@ import 'Wallet.dart';
 // Global Variables
 
 String temp = null;
-
-DaemonStop latestDaemonStop = new DaemonStop(temp, true);
-DaemonUpdateApply latestDaemonUpdateApply = new DaemonUpdateApply(temp, true);
+List<RenterFilesItem> FilesList = new List<RenterFilesItem>();
+//DaemonStop latestDaemonStop = new DaemonStop(temp, true);
+//DaemonUpdateApply latestDaemonUpdateApply = new DaemonUpdateApply(temp, true);
 DaemonUpdateCheck latestDaemonUpdateCheck = new DaemonUpdateCheck(temp, true, "0.0.1");
-ConsensusStatus latestConsensusStatus = new ConsensusStatus(temp, 10);
+ConsensusStatus latestConsensusStatus = new ConsensusStatus(temp, 10, "CurrentBlock", "Target");
 GatewayStatus latestGatewayStatus = new GatewayStatus(temp, "address", new List<String>());
-GatewaySynchronize latestGatewaySynchronize = new GatewaySynchronize(temp, true);
-GatewayPeer latestGatewayPeer = new GatewayPeer(temp, true);
-HostAnnounce latestHostAnnounce = new HostAnnounce(temp, true);
-HostConfig latestHostConfig = new HostConfig(temp, true);
+//GatewayPeer latestGatewayPeer = new GatewayPeer(temp, true);
+//HostAnnounce latestHostAnnounce = new HostAnnounce(temp, true);
+//HostConfig latestHostConfig = new HostConfig(temp, true);
 HostStatus latestHostStatus = new HostStatus(temp, 29, 0, 3006, 0, 49, 288, 3, 0, 0, 29);
 HostDBHostsActive latestHostDBHostsActive = new HostDBHostsActive(temp, ["Entries"]);
-MinerStart latestMinerStart = new MinerStart(temp, true);
+//MinerStart latestMinerStart = new MinerStart(temp, true);
 MinerStatus latestMinerStatus = new MinerStatus(temp, true, "state", 10, 5, "Address");
-MinerStop latestMinerStop = new MinerStop(temp, true);
-RenterDownload latestRenterDownload = new RenterDownload(temp, true);
-RenterDownloadQueue latestRenterDownloadQueue = new RenterDownloadQueue(temp, true, 10, 10, "dest", "nickname");
-RenterUpload latestRenterUpload = new RenterUpload(temp, true);
-RenterFiles latestRenterFiles = new RenterFiles(temp, true, "nickname", false, 0);
+//MinerStop latestMinerStop = new MinerStop(temp, true);
+//RenterFilesDownload latestRenterFilesDownload = new RenterDownload(temp, true);
+RenterDownloadQueue latestRenterDownloadQueue = new RenterDownloadQueue(temp, null);
+//RenterFilesUpload latestRenterFilesUpload = new RenterUpload(temp, true);
+RenterFiles latestRenterFiles = new RenterFiles(temp, FilesList );
 TransactionpoolTransactions latestTransactionpoolTransactions= new TransactionpoolTransactions(temp, "transaction");
 WalletAddress latestWalletAddress = new WalletAddress(temp, "Address");
 WalletSend latestWalletSend = new WalletSend(temp, "Address");
@@ -68,35 +67,73 @@ return latestTransactionpoolTransactions.copy();
 WalletAddress getWalletAddress(){
 return latestWalletAddress.copy();
 }
-
 WalletStatus getWalletStatus(){
 return latestWalletStatus.copy();
 }
 
 
+// Move all post functions here
+
+void daemonStop(Function onFinish){
+  DaemonStop.stop(onFinish);
+}
+void daemonUpdateApply(Function onFinish){
+  DaemonUpdateApply.updateApply(onFinish);
+}
+void gatewayPeerAdd(String address, Function onFinish){
+  GatewayPeer.add(address, onFinish);
+}
+void gatewayPeerRemove(String address, Function onFinish){
+  GatewayPeer.remove(address, onFinish);
+}
+void hostAnnounce(Function onFinish){
+  HostAnnounce.announce(onFinish);
+}
+void hostConfig(String TotalStorage, String MinFilesize, String MaxFileSize, String MinDuration, String MaxDuration, String WindowSize, String Price, String Collateral, Function onFinish){
+  HostConfig.config(TotalStorage, MinFilesize, MaxFileSize, MinDuration, MaxDuration, WindowSize, Price, Collateral, onFinish);
+}
+void minerStart(Function onFinish){
+  MinerStart.start(onFinish);
+}
+void minerStop(Function onFinish){
+  MinerStop.stop(onFinish);
+}
+void renterFilesDownload(String nickname, String destination, Function onFinish){
+  RenterFilesDownload.download(nickname, destination, onFinish);
+}
+void renterFilesUpload(String source, String nickname, Function onFinish){
+  RenterFilesUpload.upload(source, nickname, onFinish);
+}
+void renterFilesDelete(String nickname, Function onFinish){
+  RenterFilesDelete.delete(nickname, onFinish);
+}
+void walletSend(int Amount, String Destination, Function onFinish){
+  WalletSend.send(Amount, Destination, onFinish);
+}
+
+void printFunct(String input){
+  print(input);
+}
+
 
 // Timer approach
 void updateGlobalVariables(Timer t){
-// http.get("localhost:9980/host/status").then((response){
-//   var json = JSON.decode(response.body);
-//   latestHostStatus.TotalStorage = json["TotalStorage"];
-//   // rest of props
-// });
   
   http.get("http://localhost:9980/host/status").then((response){
      var json = JSON.decode(response.body);
      if(!(latestHostStatus.changeNotify(json))){
        print(response.body);
-       latestHostStatus.TotalStorage = json["TotalStorage"];
-       latestHostStatus.MinFilesize  = json["MinFilesize"];
-       latestHostStatus.MaxFileSize = json["MaxFileSize"];
-       latestHostStatus.MinDuration = json["MinDuration"];
-       latestHostStatus.MaxDuration = json["MaxDuration"];
-       latestHostStatus.WindowSize = json["WindowSize"];
-       latestHostStatus.Price = json["Price"];
-       latestHostStatus.Collateral = json["Collateral"];
-       latestHostStatus.StorageRemaining = json["StorageRemaining"];
-       latestHostStatus.NumContracts = json["NumContracts"];
+       latestHostStatus.parseUpdate(json);
+//       latestHostStatus.TotalStorage = json["TotalStorage"];
+//       latestHostStatus.MinFilesize  = json["MinFilesize"];
+//       latestHostStatus.MaxFileSize = json["MaxFileSize"];
+//       latestHostStatus.MinDuration = json["MinDuration"];
+//       latestHostStatus.MaxDuration = json["MaxDuration"];
+//       latestHostStatus.WindowSize = json["WindowSize"];
+//       latestHostStatus.Price = json["Price"];
+//       latestHostStatus.Collateral = json["Collateral"];
+//       latestHostStatus.StorageRemaining = json["StorageRemaining"];
+//       latestHostStatus.NumContracts = json["NumContracts"];
      }
    });
 
@@ -132,31 +169,59 @@ void updateGlobalVariables(Timer t){
 
   // RenterDownloadQueue latestRenterDownloadQueue;
   http.get("http://localhost:9980/renter/downloadqueue").then((response){
-    var json = JSON.decode(response.body);
-    //May or may not have the parameters plus more for each
-    if(!(latestRenterDownloadQueue.changeNotify(json))){
+    List json = JSON.decode(response.body);
+    bool diffJSON = false;
+    int itr = 0;
+    while(itr < json.length){
+      if(json.length != latestRenterDownloadQueue.DownloadQueue.length){
+        diffJSON = true;
+        print("This repeats");
+        break;
+      }
+      else if(!(latestRenterDownloadQueue.DownloadQueue[itr].changeNotify(json[itr]))){ 
+        diffJSON = true;
+        print("This is the one that repeats" + itr.toString());
+        break;
+      }
+      itr++;
+    }
+    //Change the list if different
+     
+    if(diffJSON){
       print(response.body);
-  //    latestRenterDownloadQueue.Complete = json["Complete"];
-  //    latestRenterDownloadQueue.Filesize = json["Filesize"];
-  //    latestRenterDownloadQueue.Destination = json["Destination"];
-  //    latestRenterDownloadQueue.Nickname = json["Nickname"];
+      latestRenterDownloadQueue.updateParse(json);
     }
   });
-
   // RenterFiles latestRenterFiles;
   http.get("http://localhost:9980/renter/files").then((response){
-    var json = JSON.decode(response.body);
-    //May or may not have the parameters plus more for each
-    if(!(latestRenterFiles.changeNotify(json))){
-      print(response.body);
+    List json = JSON.decode(response.body);
+        bool diffJSON = false;
+        int itr = 0;
+        print("json len is "+ json.length.toString());
+        print(" len is "+ latestRenterFiles.FilesList.length.toString());    
+        //Check is different
 
-  //    latestRenterFiles.Available = json["Available"];
-  //    latestRenterFiles.Nickname = json["Nickname"];
-  //    latestRenterFiles.Repairing = json["Repairing"];
-  //    latestRenterFiles.TimeRemaining = json["TimeRemaining"];
-    }
+        while(itr < json.length){
+          if(json.length != latestRenterFiles.FilesList.length){
+            diffJSON = true;
+            print("This repeats");
+            break;
+          }
+          else if(!(latestRenterFiles.FilesList[itr].changeNotify(json[itr]))){ 
+            diffJSON = true;
+            print("This is the one that repeats" + itr.toString());
+            break;
+          }
+          itr++;
+        }
+        //Change the list if different
+        
+        if(diffJSON){
+          print(response.body);
+          latestRenterFiles.updateParse(json);
+        }
   });
-
+  
   // TransactionpoolTransactions latestTransactionpoolTransactions;
   http.get("http://localhost:9980/transactionpool/transactions").then((response){
     var json = JSON.decode(response.body);
