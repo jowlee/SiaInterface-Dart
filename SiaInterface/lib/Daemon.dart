@@ -1,6 +1,5 @@
 library SiaInterface.Daemon;
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'Response.dart';
 
 class DaemonStop extends Response {
@@ -11,10 +10,9 @@ class DaemonStop extends Response {
   static void stop(Function onFinish) {
       var url = "http://localhost:9980/daemon/stop";
       http.get(url).then((response) {
-        print("Response status: ${response.statusCode}");
-        print("Response body: ${response.body}"); 
-        Map parsedMap = JSON.decode(response.body);
-        onFinish(parsedMap["Success"]);
+//        print("Response status: ${response.statusCode}");
+//        print("Response body: ${response.body}");
+        onFinish("output");
        });
     }
 }
@@ -27,10 +25,11 @@ class DaemonUpdateApply extends Response{
   static void updateApply(Function onFinish) {
       var url = "http://localhost:9980/daemon/update/apply";
       http.get(url).then((response) {
-        print("Response status: ${response.statusCode}");
-        print("Response body: ${response.body}"); 
-        Map parsedMap = JSON.decode(response.body);
-        onFinish(parsedMap["Success"]);
+//        print("Response status: ${response.statusCode}");
+//        print("Response body: ${response.body}"); 
+//        Map parsedMap = JSON.decode(response.body);
+//        onFinish(parsedMap["Success"]);
+          onFinish("output");
        });
     }
 }
@@ -42,6 +41,12 @@ class DaemonUpdateCheck extends Response{
   DaemonUpdateCheck(String jsonFormat,this.Available, this.Version) : super(jsonFormat);
   DaemonUpdateCheck copy() => new DaemonUpdateCheck(jsonFormat, this.Available, this.Version);
  
+  void parseUpdate(Map json){
+    if(json == this.jsonFormat){
+      this.Available = json["Available"];
+      this.Version = json["Version"];
+    }
+  } 
 }
 
 

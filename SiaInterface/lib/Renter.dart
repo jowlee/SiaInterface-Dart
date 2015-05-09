@@ -48,10 +48,10 @@ class RenterFilesDelete extends Response {
         var url = "http://localhost:9980/renter/upload";
         url += '?nickname=${nickname}';    // Addition of Parameters
         http.get(url).then((response) {
-          print("Response status: ${response.statusCode}");
-          print("Response body: ${response.body}"); 
-          Map parsedMap = JSON.decode(response.body);
-          onFinish(parsedMap["Success"]);
+//          print("Response status: ${response.statusCode}");
+//          print("Response body: ${response.body}"); 
+//          Map parsedMap = JSON.decode(response.body);
+          onFinish(response.body);
         });
   }
 }
@@ -65,10 +65,10 @@ class RenterFilesDownload extends Response{
       var url = "http://localhost:9980/renter/download";
       url += '?nickname=${nickname}&destination=${destination}';    // Addition of Parameters
       http.get(url).then((response) {
-        print("Response status: ${response.statusCode}");
-        print("Response body: ${response.body}"); 
-        Map parsedMap = JSON.decode(response.body);
-        onFinish(parsedMap["Success"]);
+//        print("Response status: ${response.statusCode}");
+//        print("Response body: ${response.body}"); 
+//        Map parsedMap = JSON.decode(response.body);
+        onFinish(response.body);
        });
     }
 }
@@ -80,7 +80,7 @@ class RenterFilesItem extends Response {
   int TimeRemaining;
   
   RenterFilesItem(String jsonFormat, this.Available, this.Nickname, this.Repairing, this.TimeRemaining) : super(jsonFormat){
-    print("Nickname is "+ Nickname);
+//    print("Nickname is "+ Nickname);
   }
   RenterFilesItem copy() => new RenterFilesItem(jsonFormat, Available, Nickname, Repairing, TimeRemaining);  
 
@@ -117,8 +117,8 @@ class RenterFilesLoad extends Response {
         var url = "http://localhost:9980/renter/upload";
         url += '?filename=${filename}';    // Addition of Parameters
         http.get(url).then((response) {
-          print("Response status: ${response.statusCode}");
-          print("Response body: ${response.body}"); 
+//          print("Response status: ${response.statusCode}");
+//          print("Response body: ${response.body}"); 
           Map parsedMap = JSON.decode(response.body);
           onFinish(parsedMap["FilesAdded"]);
         });
@@ -134,8 +134,8 @@ class RenterFilesLoadAscii extends Response {
         var url = "http://localhost:9980/renter/upload";
         url += '?file=${file}';    // Addition of Parameters
         http.get(url).then((response) {
-          print("Response status: ${response.statusCode}");
-          print("Response body: ${response.body}"); 
+//          print("Response status: ${response.statusCode}");
+//          print("Response body: ${response.body}"); 
           Map parsedMap = JSON.decode(response.body);
           onFinish(parsedMap["file"]);
         });
@@ -185,8 +185,8 @@ class RenterFilesShareAscii extends Response {
         var url = "http://localhost:9980/renter/upload";
         url += '?nickname=${nickname}';    // Addition of Parameters
         http.get(url).then((response) {
-          print("Response status: ${response.statusCode}");
-          print("Response body: ${response.body}"); 
+//          print("Response status: ${response.statusCode}");
+//          print("Response body: ${response.body}"); 
           Map parsedMap = JSON.decode(response.body);
           onFinish(parsedMap["File"]);
         });
@@ -202,10 +202,10 @@ class RenterFilesUpload extends Response{
       var url = "http://localhost:9980/renter/upload";
       url += '?source=${source}&nickname=${nickname}';    // Addition of Parameters
       http.get(url).then((response) {
-        print("Response status: ${response.statusCode}");
-        print("Response body: ${response.body}"); 
-        Map parsedMap = JSON.decode(response.body);
-        onFinish(parsedMap["Success"]);
+//        print("Response status: ${response.statusCode}");
+//        print("Response body: ${response.body}"); 
+//        Map parsedMap = JSON.decode(response.body);
+        onFinish(response.body);
        });
     }
 }

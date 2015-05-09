@@ -1,6 +1,5 @@
 library SiaInterface.Gateway;
 import 'package:http/http.dart' as http;
-import "dart:convert";
 import 'Response.dart';
 
 class GatewayStatus extends Response{
@@ -20,20 +19,19 @@ class GatewayPeer extends Response {
     var url = "http://localhost:9980/host/config";
           url += '?address=$address';    // Addition of Parameters
           http.get(url).then((response) {
-            print("Response status: ${response.statusCode}");
-            print("Response body: ${response.body}"); 
-            Map parsedMap = JSON.decode(response.body);
-            onFinish(parsedMap["success"]);
+//            print("Response status: ${response.statusCode}");
+//            print("Response body: ${response.body}"); 
+//            Map parsedMap = JSON.decode(response.body);
+            onFinish(response.body);
            });
   }
   static void remove(String address, Function onFinish) {
     var url = "http://localhost:9980/host/config";
           url += '?address=$address';    // Addition of Parameters
           http.get(url).then((response) {
-            print("Response status: ${response.statusCode}");
-            print("Response body: ${response.body}"); 
-            Map parsedMap = JSON.decode(response.body);
-            onFinish(parsedMap["success"]);
+//            print("Response status: ${response.statusCode}");
+//            print("Response body: ${response.body}"); 
+            onFinish(response.body);
            });
   }
 

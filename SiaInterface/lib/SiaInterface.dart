@@ -19,23 +19,17 @@ import 'Wallet.dart';
 // Global Variables
 
 String temp = null;
+List<RenterDownloadQueueitem> downloadqueue = new List<RenterDownloadQueueitem>();
+List<RenterFilesItem> files = new List<RenterFilesItem>();
+
 List<RenterFilesItem> FilesList = new List<RenterFilesItem>();
-//DaemonStop latestDaemonStop = new DaemonStop(temp, true);
-//DaemonUpdateApply latestDaemonUpdateApply = new DaemonUpdateApply(temp, true);
 DaemonUpdateCheck latestDaemonUpdateCheck = new DaemonUpdateCheck(temp, true, "0.0.1");
 ConsensusStatus latestConsensusStatus = new ConsensusStatus(temp, 10, "CurrentBlock", "Target");
 GatewayStatus latestGatewayStatus = new GatewayStatus(temp, "address", new List<String>());
-//GatewayPeer latestGatewayPeer = new GatewayPeer(temp, true);
-//HostAnnounce latestHostAnnounce = new HostAnnounce(temp, true);
-//HostConfig latestHostConfig = new HostConfig(temp, true);
 HostStatus latestHostStatus = new HostStatus(temp, 29, 0, 3006, 0, 49, 288, 3, 0, 0, 29);
 HostDBHostsActive latestHostDBHostsActive = new HostDBHostsActive(temp, ["Entries"]);
-//MinerStart latestMinerStart = new MinerStart(temp, true);
 MinerStatus latestMinerStatus = new MinerStatus(temp, true, "state", 10, 5, "Address");
-//MinerStop latestMinerStop = new MinerStop(temp, true);
-//RenterFilesDownload latestRenterFilesDownload = new RenterDownload(temp, true);
-RenterDownloadQueue latestRenterDownloadQueue = new RenterDownloadQueue(temp, null);
-//RenterFilesUpload latestRenterFilesUpload = new RenterUpload(temp, true);
+RenterDownloadQueue latestRenterDownloadQueue = new RenterDownloadQueue(temp, downloadqueue);
 RenterFiles latestRenterFiles = new RenterFiles(temp, FilesList );
 TransactionpoolTransactions latestTransactionpoolTransactions= new TransactionpoolTransactions(temp, "transaction");
 WalletAddress latestWalletAddress = new WalletAddress(temp, "Address");
@@ -48,6 +42,9 @@ return latestDaemonUpdateCheck.copy();
 }
 ConsensusStatus getConsensusStatus(){
 return latestConsensusStatus.copy();
+}
+GatewayStatus getGatewayStatus(){
+return latestGatewayStatus.copy();
 }
 HostStatus getHostStatus() {
 return latestHostStatus.copy();
@@ -74,45 +71,49 @@ return latestWalletStatus.copy();
 
 // Move all post functions here
 
-void daemonStop(Function onFinish){
-  DaemonStop.stop(onFinish);
+void consensusSynchronize([Function callback = printFunct]){
+  ConsensusSynchronize.synchronize(callback);
 }
-void daemonUpdateApply(Function onFinish){
-  DaemonUpdateApply.updateApply(onFinish);
+void daemonStop([Function callback = printFunct]){
+    DaemonStop.stop(callback);
 }
-void gatewayPeerAdd(String address, Function onFinish){
-  GatewayPeer.add(address, onFinish);
+void daemonUpdateApply([Function callback = printFunct]){
+  DaemonUpdateApply.updateApply(callback);
 }
-void gatewayPeerRemove(String address, Function onFinish){
-  GatewayPeer.remove(address, onFinish);
+void gatewayPeerAdd(String address, [Function callback = printFunct]){
+  GatewayPeer.add(address, callback);
 }
-void hostAnnounce(Function onFinish){
-  HostAnnounce.announce(onFinish);
+void gatewayPeerRemove(String address, [Function callback = printFunct]){
+  GatewayPeer.remove(address, callback);
 }
-void hostConfig(String TotalStorage, String MinFilesize, String MaxFileSize, String MinDuration, String MaxDuration, String WindowSize, String Price, String Collateral, Function onFinish){
-  HostConfig.config(TotalStorage, MinFilesize, MaxFileSize, MinDuration, MaxDuration, WindowSize, Price, Collateral, onFinish);
+void hostAnnounce([Function callback = printFunct]){
+  HostAnnounce.announce(callback);
 }
-void minerStart(Function onFinish){
-  MinerStart.start(onFinish);
+void hostConfig(String TotalStorage, String MinFilesize, String MaxFileSize, String MinDuration, String MaxDuration, String WindowSize, String Price, String Collateral, [Function callback = printFunct]){
+  HostConfig.config(TotalStorage, MinFilesize, MaxFileSize, MinDuration, MaxDuration, WindowSize, Price, Collateral, callback);
 }
-void minerStop(Function onFinish){
-  MinerStop.stop(onFinish);
+void minerStart([Function callback = printFunct]){
+  MinerStart.start(callback);
 }
-void renterFilesDownload(String nickname, String destination, Function onFinish){
-  RenterFilesDownload.download(nickname, destination, onFinish);
+void minerStop([Function callback = printFunct]){
+  MinerStop.stop(callback);
 }
-void renterFilesUpload(String source, String nickname, Function onFinish){
-  RenterFilesUpload.upload(source, nickname, onFinish);
+void renterFilesDownload(String nickname, String destination, [Function callback = printFunct] ){
+  RenterFilesDownload.download(nickname, destination, callback);
 }
-void renterFilesDelete(String nickname, Function onFinish){
-  RenterFilesDelete.delete(nickname, onFinish);
+void renterFilesUpload(String source, String nickname, [Function callback = printFunct]){
+  RenterFilesUpload.upload(source, nickname, callback);
 }
-void walletSend(int Amount, String Destination, Function onFinish){
-  WalletSend.send(Amount, Destination, onFinish);
+void renterFilesDelete(String nickname, [Function callback = printFunct]){
+  RenterFilesDelete.delete(nickname, callback);
+}
+void walletSend(int Amount, String Destination, [Function callback = printFunct]){
+  WalletSend.send(Amount, Destination, callback);
 }
 
-void printFunct(String input){
-  print(input);
+printFunct(String input) {
+//  print("Made it here");
+  print("callback returns : "+ input);
 }
 
 
@@ -120,50 +121,37 @@ void printFunct(String input){
 void updateGlobalVariables(Timer t){
   
   http.get("http://localhost:9980/host/status").then((response){
-     var json = JSON.decode(response.body);
-     if(!(latestHostStatus.changeNotify(json))){
-       print(response.body);
+     if(!(latestHostStatus.changeNotify(response.body))){
+//       print(response.body);
+       Map json = JSON.decode(response.body);
        latestHostStatus.parseUpdate(json);
-//       latestHostStatus.TotalStorage = json["TotalStorage"];
-//       latestHostStatus.MinFilesize  = json["MinFilesize"];
-//       latestHostStatus.MaxFileSize = json["MaxFileSize"];
-//       latestHostStatus.MinDuration = json["MinDuration"];
-//       latestHostStatus.MaxDuration = json["MaxDuration"];
-//       latestHostStatus.WindowSize = json["WindowSize"];
-//       latestHostStatus.Price = json["Price"];
-//       latestHostStatus.Collateral = json["Collateral"];
-//       latestHostStatus.StorageRemaining = json["StorageRemaining"];
-//       latestHostStatus.NumContracts = json["NumContracts"];
      }
    });
 
   // DaemonUpdateCheck latestDaemonUpdateCheck;
   http.get("http://localhost:9980/daemon/update/check").then((response){
-    var json = JSON.decode(response.body);
-    if(!(latestDaemonUpdateCheck.changeNotify(json))){
-      print(response.body);
-      latestDaemonUpdateCheck.Available = json["Available"];
-      latestDaemonUpdateCheck.Version = json["Version"];
+    if(!(latestDaemonUpdateCheck.changeNotify(response.body))){
+//      print(response.body);
+      Map json = JSON.decode(response.body);
+      latestDaemonUpdateCheck.parseUpdate(json);
     }
   });
   // ConsensusStatus latestConsensusStatus;
   http.get("http://localhost:9980/consensus/status").then((response){
-    var json = JSON.decode(response.body);
-    if(!(latestConsensusStatus.changeNotify(json))){
-      print(response.body);
-      latestConsensusStatus.Height = json["Height"];
+    if(!(latestConsensusStatus.changeNotify(response.body))){
+//      print(response.body);
+      Map json = JSON.decode(response.body);
+      latestConsensusStatus.parseUpdate(json);
     }
   });
 
   // MinerStatus latestMinerStatus;
   http.get("http://localhost:9980/miner/status").then((response){
-    var json = JSON.decode(response.body);
-    if(!(latestMinerStatus.changeNotify(json))){
-      print(response.body);
-      latestMinerStatus.Mining = json["Mining"];
-      latestMinerStatus.State = json["State"];
-      latestMinerStatus.Threads = json["Threads"];
-      latestMinerStatus.RunningThreads = json["RunningThreads"];
+    if(!(latestMinerStatus.changeNotify(response.body))){
+//      print(response.body);
+      Map json = JSON.decode(response.body);
+      latestMinerStatus.parseUpdate(json);
+
     }
   });
 
@@ -172,82 +160,79 @@ void updateGlobalVariables(Timer t){
     List json = JSON.decode(response.body);
     bool diffJSON = false;
     int itr = 0;
-    while(itr < json.length){
-      if(json.length != latestRenterDownloadQueue.DownloadQueue.length){
-        diffJSON = true;
-        print("This repeats");
-        break;
+    if(json.length != latestRenterDownloadQueue.DownloadQueue.length){
+      diffJSON = true;
+//      print("This repeats");
+    }
+    else{ 
+      while(itr < json.length){
+        if(!(latestRenterDownloadQueue.DownloadQueue[itr].changeNotify(JSON.encode(json[itr])))){ 
+          diffJSON = true;
+//          print("This is the one that repeats" + itr.toString());
+          break;
+        }
+        itr++;
       }
-      else if(!(latestRenterDownloadQueue.DownloadQueue[itr].changeNotify(json[itr]))){ 
-        diffJSON = true;
-        print("This is the one that repeats" + itr.toString());
-        break;
-      }
-      itr++;
     }
     //Change the list if different
      
     if(diffJSON){
-      print(response.body);
+//      print(response.body);
       latestRenterDownloadQueue.updateParse(json);
     }
-  });
+  });    
   // RenterFiles latestRenterFiles;
   http.get("http://localhost:9980/renter/files").then((response){
     List json = JSON.decode(response.body);
         bool diffJSON = false;
         int itr = 0;
-        print("json len is "+ json.length.toString());
-        print(" len is "+ latestRenterFiles.FilesList.length.toString());    
         //Check is different
 
-        while(itr < json.length){
-          if(json.length != latestRenterFiles.FilesList.length){
-            diffJSON = true;
-            print("This repeats");
-            break;
+        if(json.length != latestRenterFiles.FilesList.length){
+          diffJSON = true;
+//          print("This repeats");
+        }
+        else{ 
+          while(itr < json.length){
+           if(!(latestRenterFiles.FilesList[itr].changeNotify(JSON.encode(json[itr])))){ 
+              diffJSON = true;
+//              print("This is the one that repeats" + itr.toString());
+              break;
+            }
+            itr++;
           }
-          else if(!(latestRenterFiles.FilesList[itr].changeNotify(json[itr]))){ 
-            diffJSON = true;
-            print("This is the one that repeats" + itr.toString());
-            break;
-          }
-          itr++;
         }
         //Change the list if different
         
         if(diffJSON){
-          print(response.body);
+//          print(response.body);
           latestRenterFiles.updateParse(json);
         }
   });
-  
+
   // TransactionpoolTransactions latestTransactionpoolTransactions;
   http.get("http://localhost:9980/transactionpool/transactions").then((response){
-    var json = JSON.decode(response.body);
-    if(!(latestTransactionpoolTransactions.changeNotify(json))){
-      print(response.body);
-      latestTransactionpoolTransactions.Complete = json["Complete"];
-      latestTransactionpoolTransactions.Transactions = json["Transactions"];
+    if(!(latestTransactionpoolTransactions.changeNotify(response.body))){
+//      print(response.body);
+      Map json = JSON.decode(response.body);
+      latestTransactionpoolTransactions.parseUpdate(json);
     }
   }); 
 
 // WalletAddress latestWalletAddress;
   http.get("http://localhost:9980/wallet/address").then((response){
-    var json = JSON.decode(response.body);
-    if(!(latestWalletAddress.changeNotify(json))){
-      print(response.body);
-      latestWalletAddress.Address = json["Address"];
+    if(!(latestWalletAddress.changeNotify(response.body))){
+//      print(response.body);
+      Map json = JSON.decode(response.body);
+      latestWalletAddress.parseUpdate(json);
     }
   }); 
   // WalletStatus latestWalletStatus;
   http.get("http://localhost:9980/wallet/status").then((response){
-    var json = JSON.decode(response.body);
-    if(!(latestWalletStatus.changeNotify(json))){
-      print(response.body);
-      latestWalletStatus.Balance = json["Balance"];
-      latestWalletStatus.FullBalance = json["FullBalance"];
-      latestWalletStatus.NumAddress = json["NumAddress"];
+    if(!(latestWalletStatus.changeNotify(response.body))){
+//      print(response.body);
+      Map json = JSON.decode(response.body);
+      latestWalletStatus.parseUpdate(json);
     }
   });
 }

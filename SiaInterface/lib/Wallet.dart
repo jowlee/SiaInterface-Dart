@@ -7,6 +7,10 @@ class WalletAddress extends Response {
   String Address;
   WalletAddress(String jsonFormat, this.Address) :super(jsonFormat);
   WalletAddress copy() => new WalletAddress(jsonFormat, Address);
+
+  void parseUpdate(Map json){
+    this.Address = json["Address"];
+  }
 }
 
 class WalletSend extends Response {
@@ -18,10 +22,10 @@ class WalletSend extends Response {
       var url = "http://localhost:9980/wallet/send";
       url += '?Amount=${Amount}&Destination=${Destination}';    // Addition of Parameters
       http.get(url).then((response) {
-        print("Response status: ${response.statusCode}");
-        print("Response body: ${response.body}"); 
-        Map parsedMap = JSON.decode(response.body);
-        onFinish(parsedMap["Success"]);
+//        print("Response status: ${response.statusCode}");
+//        print("Response body: ${response.body}"); 
+//        Map parsedMap = JSON.decode(response.body);
+        onFinish(response.body);
        });
     }
 }
@@ -35,6 +39,10 @@ class WalletStatus extends Response {
   WalletStatus(String jsonFormat, this.Balance, this.FullBalance, this.NumAddress) :super(jsonFormat);
   WalletStatus copy() => new WalletStatus(jsonFormat, Balance, FullBalance, NumAddress);
 
+  void parseUpdate(Map json){
+    this.Balance = json["Balance"];
+    this.FullBalance = json["FullBalance"];
+    this.NumAddress = json["NumAddress"];  }
 }
   
 
