@@ -1,6 +1,5 @@
 library SiaInterface.Gateway;
 import 'package:http/http.dart' as http;
-import "dart:convert";
 import 'Response.dart';
 
 class GatewayStatus extends Response{
@@ -10,11 +9,7 @@ class GatewayStatus extends Response{
   GatewayStatus(String jsonFormat, this.Address, this.peers) : super(jsonFormat);
   GatewayStatus copy() => new GatewayStatus(jsonFormat, this.Address, this.peers);
 }
-class GatewaySynchronize extends Response {
-  bool Success;
-  GatewaySynchronize(String jsonFormat, this.Success) : super(jsonFormat);
-  GatewaySynchronize copy() => new GatewaySynchronize(jsonFormat, this.Success);
-}
+
 class GatewayPeer extends Response {
   bool Success;
   GatewayPeer(String jsonFormat, this.Success) : super(jsonFormat);
@@ -24,20 +19,19 @@ class GatewayPeer extends Response {
     var url = "http://localhost:9980/host/config";
           url += '?address=$address';    // Addition of Parameters
           http.get(url).then((response) {
-            print("Response status: ${response.statusCode}");
-            print("Response body: ${response.body}"); 
-            Map parsedMap = JSON.decode(response.body);
-            onFinish(parsedMap["success"]);
+//            print("Response status: ${response.statusCode}");
+//            print("Response body: ${response.body}"); 
+//            Map parsedMap = JSON.decode(response.body);
+            onFinish(response.body);
            });
   }
   static void remove(String address, Function onFinish) {
     var url = "http://localhost:9980/host/config";
           url += '?address=$address';    // Addition of Parameters
           http.get(url).then((response) {
-            print("Response status: ${response.statusCode}");
-            print("Response body: ${response.body}"); 
-            Map parsedMap = JSON.decode(response.body);
-            onFinish(parsedMap["success"]);
+//            print("Response status: ${response.statusCode}");
+//            print("Response body: ${response.body}"); 
+            onFinish(response.body);
            });
   }
 

@@ -12,10 +12,10 @@ class HostAnnounce extends Response {
   static void announce(Function onFinish) {
     var url = "http://localhost:9980/host/announce";
              http.get(url).then((response) {
-               print("Response status: ${response.statusCode}");
-               print("Response body: ${response.body}"); 
-               Map parsedMap = JSON.decode(response.body);
-               onFinish(parsedMap["success"]);
+//               print("Response status: ${response.statusCode}");
+//               print("Response body: ${response.body}"); 
+//               Map parsedMap = JSON.decode(response.body);
+               onFinish(response.body);
               });
   }
 }
@@ -29,10 +29,9 @@ class HostConfig extends Response {
     var url = "http://localhost:9980/host/config";
           url += '?TotalStorage=$TotalStorage&MinFilesize=$MinFilesize&MaxFileSize=$MaxFileSize&MinDuration=$MinDuration&MaxDuration=$MaxDuration&WindowSize=$WindowSize&Price=$Price&Collateral=$Collateral';    // Addition of Parameters
           http.get(url).then((response) {
-            print("Response status: ${response.statusCode}");
-            print("Response body: ${response.body}"); 
-            Map parsedMap = JSON.decode(response.body);
-            onFinish(parsedMap["success"]);
+//            print("Response status: ${response.statusCode}");
+//            print("Response body: ${response.body}"); 
+            onFinish(response.body);
            });
   }
 }
@@ -53,7 +52,6 @@ class HostStatus extends Response {
   HostStatus copy() => new HostStatus(jsonFormat, this.TotalStorage, this.MinFilesize, this.MaxFileSize, this.MinDuration, this.MaxDuration, this.WindowSize, this.Price, this.Collateral, this.StorageRemaining, this.NumContracts);
 
   void parseUpdate(Map json){
-    if(json == this.jsonFormat)
     this.TotalStorage = json["TotalStorage"];
     this.MinFilesize  = json["MinFilesize"];
     this.MaxFileSize = json["MaxFileSize"];
@@ -65,8 +63,8 @@ class HostStatus extends Response {
     this.StorageRemaining = json["StorageRemaining"];
     this.NumContracts = json["NumContracts"];
   }
-
 }
+
 class HostDBHostsActive extends Response {
   //unclear type
   List<String> Entries;   //  List<HostEntry> Entries = null;

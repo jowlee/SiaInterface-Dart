@@ -11,10 +11,9 @@ class MinerStart extends Response {
   static void start(Function onFinish) {
       var url = "http://localhost:9980/miner/start";
       http.get(url).then((response) {
-        print("Response status: ${response.statusCode}");
-        print("Response body: ${response.body}"); 
-        Map parsedMap = JSON.decode(response.body);
-        onFinish(parsedMap["Success"]);
+//        print("Response status: ${response.statusCode}");
+//        print("Response body: ${response.body}"); 
+        onFinish(response.body);
        });
     }
 }
@@ -29,6 +28,13 @@ class MinerStatus extends Response{
 
   MinerStatus(String jsonFormat, this.Mining, this.State, this.Threads, this.RunningThreads, this.Address ) : super(jsonFormat);
   MinerStatus copy() => new MinerStatus(jsonFormat, Mining, State, Threads, RunningThreads, Address);
+
+  void parseUpdate(Map json){
+    this.Mining = json["Mining"];
+    this.State = json["State"];
+    this.Threads = json["Threads"];
+    this.RunningThreads = json["RunningThreads"];
+  }
 }
 
 class MinerStop extends Response{
@@ -39,10 +45,9 @@ class MinerStop extends Response{
   static void stop(Function onFinish) {
       var url = "http://localhost:9980/miner/stop";
       http.get(url).then((response) {
-        print("Response status: ${response.statusCode}");
-        print("Response body: ${response.body}"); 
-        Map parsedMap = JSON.decode(response.body);
-        onFinish(parsedMap["Success"]);
+//        print("Response status: ${response.statusCode}");
+//        print("Response body: ${response.body}"); 
+        onFinish(response.body);
        });
     }
 }

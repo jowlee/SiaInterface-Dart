@@ -1,21 +1,24 @@
 library SiaInterface.Response;
-import 'dart:convert';
 
 class Response{
   String jsonFormat;
-  Response(input){
-    jsonFormat = JSON.encode(input);
+  Response(String input){
+    jsonFormat = input;
   }
 
-  bool changeNotify(Map jsonResponse){
-    String jsonData = JSON.encode(jsonResponse);
+  bool changeNotify(String response){
 
-    if(jsonData == this.jsonFormat){
+    if(response == this.jsonFormat){
      return true;
     }
-    print("this is " + jsonFormat);
-    print("next is " + jsonData);
-    this.jsonFormat = jsonData; 
+//    if(jsonFormat != null){
+//      print("current is " + this.jsonFormat);
+//    }
+//    else{
+//      print("Current is null");
+//    }
+//    print("next is " + response);
+    jsonFormat = response; 
 
     return false;
   }
